@@ -458,4 +458,33 @@ describe('review regressions', () => {
       'cycle:forward:1.5:tagged',
     ])
   })
+
+  test('share_busway adds no cycle lane next to the bus lane', () => {
+    const seg = buildRoadSpaceSegment(
+      {
+        highway: 'primary',
+        oneway: 'yes',
+        lanes: '3',
+        'lanes:psv': '1',
+        'cycleway:right': 'share_busway',
+        'cycleway:right:width': '4',
+      },
+      { wayId: 1, role: 'current' },
+    )
+    expect(seg.slots.map((s) => s.kind)).toEqual(['motor', 'motor', 'bus'])
+  })
+
+  test('lanes of opposite directions are never joined across a seam', () => {
+    for (const id of ['kaiserin-augusta-allee-direction-flip', 'tegeler-weg-four-to-two']) {
+      const chain = fixtureChain(id)
+      const { correspondences } = solveChainOffsets(chain.segments)
+      correspondences.forEach((corr, i) => {
+        for (const pair of corr.pairs) {
+          const a = chain.segments[i]!.slots[pair.indexA]!
+          const b = chain.segments[i + 1]!.slots[pair.indexB]!
+          expect(`${a.direction}→${b.direction}`).not.toMatch(/forward→backward|backward→forward/)
+        }
+      })
+    }
+  })
 })

@@ -1546,7 +1546,7 @@ export const laneDiagramFixtures: readonly DiagramFixture[] = [
         },
       },
     ],
-    note: 'Open: an extra cycle lane is drawn for share_busway, and the bus lane that only exists at certain times is not shown.',
+    note: 'Open: the bus lane only exists at certain times (lanes:psv:conditional) and is not shown, so nothing shows where cyclists ride.',
   },
   {
     id: 'unter-den-eichen-lane-access',
@@ -1833,7 +1833,6 @@ export const laneDiagramFixtures: readonly DiagramFixture[] = [
         },
       },
     ],
-    note: 'Open: lanes of opposite directions are joined across the seam.',
   },
   {
     id: 'tegeler-weg-four-to-two',
@@ -1880,7 +1879,6 @@ export const laneDiagramFixtures: readonly DiagramFixture[] = [
         },
       },
     ],
-    note: 'Open: lanes of opposite directions are joined across the seam.',
   },
   {
     id: 'falkenseer-chaussee-width-change',

@@ -190,7 +190,20 @@ export function slotCenterM(
   return starts[index]! + slot.widthM / 2
 }
 
+/** Never join a forward lane to a backward lane — worse than any number of gaps. */
+const OPPOSITE_DIRECTION_SCORE = -1000
+
+function isOppositeDirection(a: RoadSpaceSlot, b: RoadSpaceSlot): boolean {
+  return (
+    (a.direction === 'forward' && b.direction === 'backward') ||
+    (a.direction === 'backward' && b.direction === 'forward')
+  )
+}
+
 function matchScore(a: RoadSpaceSlot, b: RoadSpaceSlot): number {
+  if (a.zone === 'carriageway' && b.zone === 'carriageway' && isOppositeDirection(a, b)) {
+    return OPPOSITE_DIRECTION_SCORE
+  }
   let score = 0
   if (a.zone === b.zone) score += 5
   else score -= 10

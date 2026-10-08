@@ -53,7 +53,8 @@ function inferKind(
   if (psvVal === 'designated' || psvVal === 'yes') return 'bus'
   if (direction === 'both_ways') return 'both_ways_turn'
   const turnVal = turn?.toLowerCase() ?? ''
-  if (turnVal.includes('both_ways') || turnVal.includes('reverse')) return 'both_ways_turn'
+  // `reverse` is a U-turn lane of this direction, not a lane used in both directions.
+  if (turnVal.includes('both_ways')) return 'both_ways_turn'
   return 'travel'
 }
 

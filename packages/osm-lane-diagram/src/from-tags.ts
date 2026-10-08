@@ -240,7 +240,12 @@ function cyclewayLanesPipe(tags: Record<string, string>): string | undefined {
 }
 
 function isCyclewayLanesCycleToken(token: string): boolean {
-  return token === 'lane' || token === 'share_busway' || token === 'shared_lane'
+  return token === 'lane' || token === 'shared_lane'
+}
+
+function isShareBuswayValue(value: string): boolean {
+  const v = value.toLowerCase()
+  return v === 'share_busway' || v === 'opposite_share_busway'
 }
 
 /**
@@ -312,9 +317,8 @@ function expandOnCarriagewayCycleSlots(
   const result = [...carriageway]
   const addSide = (side: SidepathSide, value: string) => {
     if (!isOnCarriagewayCycleValue(value)) return
-    // Avoid duplicating when bicycle:lanes already produced a cycle slot at that edge
-    const hasBike = result.some((s) => s.kind === 'cycle')
-    if (hasBike && value === 'share_busway') return
+    // share_busway: cyclists ride in the bus lane, there is no lane of their own.
+    if (isShareBuswayValue(value)) return
 
     const direction = deriveCarriagewayCycleDirection(tags, side, value)
     const slot = makeCycleSlot(

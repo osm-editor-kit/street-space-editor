@@ -234,6 +234,20 @@ describe('muv-inspired fixtures', () => {
     expect(kinds('yes|yes|designated')).toEqual(['travel', 'travel', 'bus'])
   })
 
+  test('turn:lanes with reverse is a U-turn lane of its own direction', () => {
+    const model = parseWayLanes({
+      highway: 'secondary',
+      oneway: 'yes',
+      lanes: '3',
+      'turn:lanes': 'reverse|through|right',
+    })
+    expect(model.slots.map((s) => `${s.kind}:${s.direction}`)).toEqual([
+      'travel:forward',
+      'travel:forward',
+      'travel:forward',
+    ])
+  })
+
   test('muv-hwy-bus_lanes_count: lanes:bus:forward=1', () => {
     const tags = {
       highway: 'primary',
