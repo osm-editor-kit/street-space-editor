@@ -1439,7 +1439,7 @@ describe('sceneToSvg snapshots', () => {
 
 describe('all fixtures', () => {
   test('every fixture lays out without throwing and has ≥1 slot rect per segment', () => {
-    expect(laneDiagramFixtures).toHaveLength(45)
+    expect(laneDiagramFixtures).toHaveLength(54)
     for (const fixture of laneDiagramFixtures) {
       const chain = fixtureChain(fixture.id)
       const scene = layoutRoadSpace(chain)
@@ -1448,8 +1448,8 @@ describe('all fixtures', () => {
       expect(scene.bands.length).toBeGreaterThanOrEqual(fixture.segments.length * 2 - 1)
       for (const seg of chain.segments) {
         const rects = scene.slotRects.filter((r) => r.wayId === seg.wayId)
-        // Open problem: a way without lanes=* gets no slots at all.
-        if (fixture.id === 'contraflow-without-lane') continue
+        // By design: a way without any carriageway tag draws nothing.
+        if (fixture.id === 'seepromenade-no-indicator') continue
         expect(rects.length).toBeGreaterThanOrEqual(1)
       }
       expect(() => sceneToSvg(scene)).not.toThrow()

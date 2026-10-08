@@ -46,6 +46,7 @@ export {
 export {
   buildRoadSpaceSegment,
   createsOnWaySidepathSlot,
+  hasCarriagewayIndicator,
   prepareDualSiblingSlots,
 } from './from-tags'
 

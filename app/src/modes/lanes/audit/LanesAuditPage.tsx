@@ -397,6 +397,13 @@ function Legend(): ReactElement {
           <code className="font-mono text-[0.9em]">none</code> produce no geometry at all.
         </li>
         <li>
+          A way without <code className="font-mono text-[0.9em]">lanes=*</code> is drawn as one
+          unmarked carriageway (↕ for both directions, ↑ for a oneway) when other tags describe it:{' '}
+          <code className="font-mono text-[0.9em]">lane_markings</code>, a width, parking, a oneway,
+          a bicycle road or cycle lanes. Its width is never split into lanes. A way with none of
+          these tags draws nothing.
+        </li>
+        <li>
           Arrows hint travel direction (forward = up); turn glyphs come from{' '}
           <code className="font-mono text-[0.9em]">turn:lanes</code>.
         </li>

@@ -18,3 +18,5 @@ Core features to date:
 - `scene.bands[].separatelyMapped` anchors markers for `sidewalk|cycleway:*=separate` next to the road edge
 - Turn lanes that start between the two directions taper out of their neighbour lane
 - Fixtures include real Berlin ways (bus lane, mid-road cycle lane, centre lane for both directions, merge lane drop)
+- Ways without `lanes=*` draw one unmarked carriageway when other tags describe it (`hasCarriagewayIndicator`: lane_markings, width, parking, oneway, bicycle road, cycle lanes)
+- `bun run lanes:census --pbf <file>` runs every road way of an OSM extract through the diagram code and counts open problems

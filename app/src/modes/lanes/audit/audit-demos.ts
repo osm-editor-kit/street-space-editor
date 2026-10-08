@@ -7,6 +7,7 @@ export type FixtureGroupId =
   | 'field'
   | 'berlin'
   | 'berlin-more'
+  | 'no-lanes'
   | 'bike'
   | 'width'
 
@@ -54,7 +55,6 @@ const FIXTURE_GROUPS: readonly {
     label: 'Berlin cases: access, buses, open problems',
     fixtureIds: [
       'gertraudenstrasse-share-busway',
-      'contraflow-without-lane',
       'unter-den-eichen-lane-access',
       'dudenstrasse-bus-lane-backward',
       'sickingenbruecke-cycle-lane-forward',
@@ -67,6 +67,22 @@ const FIXTURE_GROUPS: readonly {
       'schoenholzer-strasse-change-lanes',
       'teltower-damm-track-and-lane',
       'steglitzer-damm-crossing',
+    ],
+  },
+  {
+    id: 'no-lanes',
+    label: 'Berlin cases: no lanes=* tag',
+    fixtureIds: [
+      'solinger-strasse-unmarked-parking',
+      'kienhorststrasse-parking-only',
+      'colbestrasse-oneway-contraflow',
+      'ohlauer-strasse-cycle-lanes-unmarked',
+      'prinzregentenstrasse-bicycle-road',
+      'reichweindamm-lanes-forward-backward',
+      'britzer-damm-turn-lanes-no-count',
+      'oranienplatz-contraflow-cycle-lane',
+      'belziger-strasse-marked-no-count',
+      'seepromenade-no-indicator',
     ],
   },
   {

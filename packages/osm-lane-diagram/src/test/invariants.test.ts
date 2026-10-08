@@ -437,4 +437,25 @@ describe('review regressions', () => {
     expect(next.separatelyMapped?.map((h) => h.side)).toEqual(['right'])
     expect(scene.medianOpenings).toHaveLength(1)
   })
+
+  test('no lanes=*: other carriageway tags give one unmarked carriageway', () => {
+    const slots = (tags: Record<string, string>) =>
+      buildRoadSpaceSegment({ highway: 'residential', ...tags }, { wayId: 1, role: 'current' })
+        .slots.filter((s) => s.zone === 'carriageway')
+        .map((s) => `${s.kind}:${s.direction}:${s.widthM}:${s.widthProvenance}`)
+    // Nothing describes the carriageway → nothing is drawn.
+    expect(slots({})).toEqual([])
+    expect(slots({ sidewalk: 'both' })).toEqual([])
+    // Used in both directions unless oneway; the width is never split into lanes.
+    expect(slots({ lane_markings: 'no' })).toEqual(['motor:both_ways:6:default'])
+    expect(slots({ 'parking:both': 'lane' })).toEqual(['motor:both_ways:6:default'])
+    expect(slots({ lane_markings: 'no', width: '7.5' })).toEqual(['motor:both_ways:7.5:inferred'])
+    expect(slots({ 'width:carriageway': '5' })).toEqual(['motor:both_ways:5:tagged'])
+    expect(slots({ oneway: 'yes' })).toEqual(['motor:forward:3:default'])
+    expect(slots({ 'cycleway:both': 'lane', 'cycleway:both:width': '1.5', width: '9' })).toEqual([
+      'cycle:backward:1.5:tagged',
+      'motor:both_ways:6:inferred',
+      'cycle:forward:1.5:tagged',
+    ])
+  })
 })

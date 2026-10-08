@@ -581,6 +581,47 @@ function orderCarriagewayLtr(slots: RoadSpaceSlot[]): RoadSpaceSlot[] {
   return [...leftCycle, ...backward, ...both, ...forward, ...rightCycle]
 }
 
+/**
+ * Tags that describe the carriageway although no lane count is tagged. Most residential
+ * streets are like this: `lane_markings=no`, a width, parking or a oneway, but no `lanes`.
+ */
+export function hasCarriagewayIndicator(tags: Record<string, string>): boolean {
+  if (tags.lane_markings != null) return true
+  if (tags.width != null || tags.est_width != null || tags['width:carriageway'] != null) return true
+  if (
+    tags['parking:left'] != null ||
+    tags['parking:right'] != null ||
+    tags['parking:both'] != null
+  ) {
+    return true
+  }
+  if (isMotorOneway(tags) || tags['oneway:bicycle'] != null) return true
+  if (tags.bicycle_road === 'yes' || tags.cyclestreet === 'yes') return true
+  if (tags.shoulder != null || tags.narrow != null) return true
+  return [tags.cycleway, tags['cycleway:left'], tags['cycleway:right'], tags['cycleway:both']].some(
+    isOnCarriagewayCycleValue,
+  )
+}
+
+/**
+ * One carriageway without a lane count: drawn as a single unmarked area, used in both
+ * directions unless the way is a oneway. No lanes are invented from the width.
+ */
+function unmarkedCarriagewaySlot(wayId: number, tags: Record<string, string>): RoadSpaceSlot {
+  const oneway = isMotorOneway(tags)
+  const direction: RoadSpaceDirection = oneway ? 'forward' : 'both_ways'
+  const tagged = parseWidthToken(tags['width:carriageway'])
+  return {
+    id: formatLaneSlotId(wayId, direction === 'forward' ? 'forward' : 'both_ways', 0),
+    kind: 'motor',
+    zone: 'carriageway',
+    direction,
+    widthM: tagged ?? DEFAULT_WIDTHS_M.motor * (oneway ? 1 : 2),
+    widthProvenance: tagged != null ? 'tagged' : 'default',
+    label: 'unmarked',
+  }
+}
+
 function carriagewayWidthM(slots: RoadSpaceSlot[]): number {
   return slots.filter((s) => s.zone === 'carriageway').reduce((sum, s) => sum + s.widthM, 0)
 }
@@ -736,6 +777,9 @@ export function buildRoadSpaceSegment(
   const model = parseWayLanes(tags)
 
   let carriageway = model.slots.map((slot) => carriagewaySlotFromLane(wayId, slot))
+  if (carriageway.length === 0 && hasCarriagewayIndicator(effectiveTags)) {
+    carriageway = [unmarkedCarriagewaySlot(wayId, effectiveTags)]
+  }
   const expanded = expandOnCarriagewayCycleSlots(wayId, effectiveTags, carriageway)
   // Pipe positions are LTR truth; only sided cycle lanes need edge sorting.
   carriageway = expanded.fromPipe ? expanded.slots : orderCarriagewayLtr(expanded.slots)
