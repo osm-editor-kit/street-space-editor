@@ -484,53 +484,96 @@ function medianFill(hint: 'verge' | 'crossing' | undefined): string {
   return hint === 'crossing' ? COLORS.medianCrossing : COLORS.medianVerge
 }
 
+/** Width of one marker column next to the road edge (dotted line + icon). */
+const SEPARATE_MARKER_STEP_PX = 14
+
 /**
- * Marker next to the road edge for a sidewalk / cycleway that is mapped as its own way:
- * a dashed line with a small icon, outside the kerb where the path would be.
+ * Markers next to the road edge for a sidewalk / cycleway that is mapped as its own way:
+ * a dotted line with a small icon, outside the kerb where the path would be. Several on
+ * one side sit next to each other, the cycleway closer to the road.
  */
-function SeparatelyMappedMarker({
-  hint,
+function SeparatelyMappedMarkers({
   band,
 }: {
-  hint: NonNullable<RoadSpaceScene['bands'][number]['separatelyMapped']>[number]
   band: RoadSpaceScene['bands'][number]
-}): ReactElement {
-  const offset = hint.prefix === 'cycleway' ? 5 : 10
-  const x = hint.side === 'left' ? hint.x - offset : hint.x + offset
-  const midY = band.y + band.height / 2 + (hint.prefix === 'cycleway' ? -12 : 12)
-  const Icon = hint.prefix === 'cycleway' ? Bike : Footprints
+}): ReactElement | null {
+  const hints = band.separatelyMapped ?? []
+  if (hints.length === 0) return null
   const size = 12
+  const midY = band.y + band.height / 2
   return (
     <g pointerEvents="none" opacity={band.dimmed ? 0.7 : 1}>
-      <line
-        x1={x}
-        y1={band.y + 5}
-        x2={x}
-        y2={band.y + band.height - 5}
-        stroke={COLORS.separateMarker}
-        strokeWidth={1.25}
-        strokeDasharray="1 4"
-        strokeLinecap="round"
-      />
-      <rect
-        x={x - size / 2 - 1}
-        y={midY - size / 2 - 1}
-        width={size + 2}
-        height={size + 2}
-        fill="white"
-      />
-      <Icon
-        x={x - size / 2}
-        y={midY - size / 2}
-        width={size}
-        height={size}
-        color={COLORS.separateMarker}
-        strokeWidth={2}
-        aria-hidden
-      />
+      {(['left', 'right'] as const).flatMap((side) =>
+        hints
+          .filter((h) => h.side === side)
+          .toSorted((a, b) => (a.prefix === 'cycleway' ? 0 : 1) - (b.prefix === 'cycleway' ? 0 : 1))
+          .map((hint, column) => {
+            const offset = 9 + column * SEPARATE_MARKER_STEP_PX
+            const x = side === 'left' ? hint.x - offset : hint.x + offset
+            const Icon = hint.prefix === 'cycleway' ? Bike : Footprints
+            return (
+              <g key={`${hint.prefix}-${side}`}>
+                <line
+                  x1={x}
+                  y1={band.y + 5}
+                  x2={x}
+                  y2={band.y + band.height - 5}
+                  stroke={COLORS.separateMarker}
+                  strokeWidth={1.25}
+                  strokeDasharray="1 4"
+                  strokeLinecap="round"
+                />
+                <rect
+                  x={x - size / 2}
+                  y={midY - size / 2 - 1}
+                  width={size}
+                  height={size + 2}
+                  fill="white"
+                />
+                <Icon
+                  x={x - size / 2}
+                  y={midY - size / 2}
+                  width={size}
+                  height={size}
+                  color={COLORS.separateMarker}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+              </g>
+            )
+          }),
+      )}
     </g>
   )
 }
+
+/** Extra room left and right of the scene for the markers (the scene has 16 px padding). */
+function separateMarkerGutterPx(scene: RoadSpaceScene): number {
+  const perSide = scene.bands.flatMap((band) =>
+    (['left', 'right'] as const).map(
+      (side) => (band.separatelyMapped ?? []).filter((h) => h.side === side).length,
+    ),
+  )
+  const columns = Math.max(0, ...perSide)
+  return columns <= 1 ? 0 : (columns - 1) * SEPARATE_MARKER_STEP_PX
+}
+
+/** x of the selected way's line at height `y` (the line can bend between bands). */
+function wayLineXAt(scene: RoadSpaceScene, y: number): number | null {
+  const points = scene.polylines.find((l) => l.kind === 'placement_guide')?.points
+  if (!points || points.length === 0) return null
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i]!
+    const b = points[i + 1]!
+    if (y >= a.y && y <= b.y) {
+      return b.y === a.y ? a.x : a.x + ((b.x - a.x) * (y - a.y)) / (b.y - a.y)
+    }
+  }
+  return y < points[0]!.y ? points[0]!.x : points.at(-1)!.x
+}
+
+/** How far a lane's arrow and width number move aside when the way line runs through them. */
+const WAY_LINE_CLEARANCE_PX = 15
 
 function isRibbonHighlighted(ribbon: SceneRibbon, highlightedSlotId?: string | null): boolean {
   if (highlightedSlotId == null || highlightedSlotId === '') return false
@@ -580,9 +623,12 @@ function SlotRect({
   siblingLabel,
   ribbons,
   ribbonsCoverTravel,
+  wayLineX,
 }: {
   rect: SceneSlotRect
   highlightedSlotId?: string | null
+  /** x of the selected way's line at this slot's height, when the slot is not dimmed. */
+  wayLineX: number | null
   metersToPx: number
   siblingLabel: string
   ribbons: SceneRibbon[]
@@ -620,8 +666,20 @@ function SlotRect({
         : kindFill(rect.kind, isTagged || isInferred)
   // Per-band overlays use this rect's centre — not the ribbon's single glyph
   // anchor (that collapsed prev/next labels onto the current band).
-  const cx = rect.x + rect.width / 2
   const cy = rect.y + rect.height / 2
+  // The way line (and its arrow) can run through the middle of a lane: put the lane's
+  // arrow and width number next to it, on the side with more room.
+  const centreX = rect.x + rect.width / 2
+  const lineClash =
+    wayLineX != null &&
+    !isMedian &&
+    Math.abs(centreX - wayLineX) < WAY_LINE_CLEARANCE_PX &&
+    rect.width >= WAY_LINE_CLEARANCE_PX * 3
+  const cx = !lineClash
+    ? centreX
+    : rect.x + rect.width - wayLineX! >= wayLineX! - rect.x
+      ? wayLineX! + WAY_LINE_CLEARANCE_PX
+      : wayLineX! - WAY_LINE_CLEARANCE_PX
   const glyphSize = Math.min(rect.width, rect.height) * 0.42
   const fillOpacity = isMedian
     ? 1
@@ -755,7 +813,16 @@ function SlotRect({
 
 const PLACEMENT_DELTA_WARN_M = 0.35
 
-function DebugOverlay({ scene }: { scene: RoadSpaceScene }): ReactElement | null {
+/** Left gutter for the per-band debug labels, so they do not cover lanes and numbers. */
+const DEBUG_LABEL_GUTTER_PX = 118
+
+function DebugOverlay({
+  scene,
+  labelX,
+}: {
+  scene: RoadSpaceScene
+  labelX: number
+}): ReactElement | null {
   const debug = scene.debug
   if (!debug) return null
 
@@ -779,7 +846,6 @@ function DebugOverlay({ scene }: { scene: RoadSpaceScene }): ReactElement | null
         const band = scene.bands[offset.bandIndex]
         if (!band) return null
         const midY = band.y + band.height / 2
-        const labelX = 4
         const provenanceColor =
           offset.provenance === 'anchor' ? COLORS.debugAnchor : COLORS.debugChained
         const hasPlacementWarn =
@@ -862,19 +928,23 @@ export function RoadSpaceDiagram({
   const ribbons = scene.ribbons ?? []
   const ribbonsCoverTravel = ribbons.length > 0
   const plates = scene.carriagewayPlates ?? (scene.carriagewayPlate ? [scene.carriagewayPlate] : [])
+  // Room outside the scene box: marker columns on both sides, debug labels on the left.
+  const gutterRight = separateMarkerGutterPx(scene)
+  const gutterLeft = gutterRight + (debug ? DEBUG_LABEL_GUTTER_PX : 0)
+  const totalWidth = scene.widthPx + gutterLeft + gutterRight
 
   return (
     <svg
       role="img"
       aria-label={ariaLabel}
       className={className}
-      width={scene.widthPx}
+      width={totalWidth}
       height={scene.heightPx}
-      viewBox={`0 0 ${scene.widthPx} ${scene.heightPx}`}
+      viewBox={`${-gutterLeft} 0 ${totalWidth} ${scene.heightPx}`}
       preserveAspectRatio="xMidYMin meet"
       style={{
         pointerEvents: 'none',
-        width: scene.widthPx,
+        width: totalWidth,
         maxWidth: '100%',
         height: 'auto',
         display: 'block',
@@ -968,6 +1038,7 @@ export function RoadSpaceDiagram({
           siblingLabel={siblingLabel}
           ribbons={ribbons}
           ribbonsCoverTravel={ribbonsCoverTravel}
+          wayLineX={wayLineXAt(scene, rect.y + rect.height / 2)}
         />
       ))}
 
@@ -1026,15 +1097,12 @@ export function RoadSpaceDiagram({
           />
         ))}
 
-      {scene.bands.flatMap((band) =>
-        (band.separatelyMapped ?? []).map((hint) => (
-          <SeparatelyMappedMarker
-            key={`separate-${band.wayId}-${band.role}-${hint.prefix}-${hint.side}`}
-            hint={hint}
-            band={band}
-          />
-        )),
-      )}
+      {scene.bands.map((band) => (
+        <SeparatelyMappedMarkers
+          key={`separate-${band.wayId}-${band.role}-${band.y}`}
+          band={band}
+        />
+      ))}
 
       {/* Way-direction cue + side labels above markings. */}
       {scene.polylines
@@ -1162,7 +1230,7 @@ export function RoadSpaceDiagram({
           )
         })}
 
-      {debug ? <DebugOverlay scene={scene} /> : null}
+      {debug ? <DebugOverlay scene={scene} labelX={-gutterLeft + 2} /> : null}
     </svg>
   )
 }
