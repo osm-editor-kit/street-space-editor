@@ -25,6 +25,8 @@
   "changesets": [
     "date-slider-scale",
     "gentle-tidy-anchors",
+    "imagery-bbox-helper-reuse",
+    "imagery-compiled-stable-viewport",
     "imagery-dense-areas-smooth",
     "imagery-floating-viewer-default-position",
     "imagery-layers-before-id",
@@ -35,6 +37,7 @@
     "imagery-photo-cache-limit",
     "imagery-photo-click-target",
     "imagery-photo-count-format",
+    "imagery-photo-type-test-once",
     "imagery-viewer-panels-entry",
     "installable-kit-packages",
     "kartaview-small-tiles",
