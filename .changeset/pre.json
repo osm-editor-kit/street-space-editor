@@ -25,6 +25,7 @@
   "changesets": [
     "date-slider-scale",
     "gentle-tidy-anchors",
+    "imagery-dense-areas-smooth",
     "imagery-floating-viewer-default-position",
     "imagery-layers-before-id",
     "imagery-low-zoom-lines",
