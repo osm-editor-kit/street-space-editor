@@ -310,7 +310,7 @@
     },
     "packages/street-imagery": {
       "name": "@osm-editor-kit/street-imagery",
-      "version": "0.1.0-alpha.4",
+      "version": "0.1.0-alpha.9",
       "dependencies": {
         "@mapbox/vector-tile": "^3.0.0",
         "date-fns": "^4.4.0",
@@ -327,13 +327,16 @@
     },
     "packages/street-imagery-react": {
       "name": "@osm-editor-kit/street-imagery-react",
-      "version": "0.1.0-alpha.5",
+      "version": "0.1.0-alpha.12",
       "devDependencies": {
+        "@babel/core": "^7.29.7",
         "@panoramax/web-viewer": "^5",
         "@tanstack/react-query": "^5.85.5",
+        "@types/babel__core": "^7.20.5",
         "@types/geojson": "^7946.0.16",
         "@types/react": "^19.1.10",
         "@types/react-dom": "^19.1.7",
+        "babel-plugin-react-compiler": "^19.1.0-rc.2",
         "bun-types": "^1.2.20",
         "mapillary-js": "^4.1.2",
         "maplibre-gl": "^6.7.0",
@@ -355,6 +358,9 @@
         "react-map-gl": "^8",
         "zustand": "^5",
       },
+      "optionalPeers": [
+        "@panoramax/web-viewer",
+      ],
     },
   },
   "packages": {

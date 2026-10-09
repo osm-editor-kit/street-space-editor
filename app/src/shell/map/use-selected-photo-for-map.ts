@@ -38,7 +38,7 @@ export function useSelectedPhotoForMap(): {
 } {
   const { photo, photos = [], photoTypes, photoDate } = useSearch({ from: '/$mode' })
   const map = useMapViewport()
-  const bbox = useMapViewportBbox(MAIN_MAP_ID, map)
+  const bbox = useMapViewportBbox(MAIN_MAP_ID)
   const dateFilter = useMemo(
     () => resolvePhotoDateFilter(photoDate, photos.length > 0),
     [photoDate, photos.length],

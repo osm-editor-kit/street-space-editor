@@ -62,7 +62,7 @@ export function MapStreetImageryControls() {
   const { search, updateSearch } = useModeSearchNavigation()
   const uiLocale = useUiLocale()
   const map = useMapViewport()
-  const bbox = useMapViewportBbox(MAIN_MAP_ID, map)
+  const bbox = useMapViewportBbox(MAIN_MAP_ID)
   const enabled = new Set(search.photos ?? [])
   const photoTypes = search.photoTypes ?? [...DEFAULT_PHOTO_TYPES]
   const photoTypeSet = new Set(photoTypes)

@@ -18,7 +18,7 @@ import { useSelectedSign } from './use-selected-sign'
 export function MapStreetImageryLayers() {
   const { photos = [], photoTypes, photoDate, signGroups } = useSearch({ from: '/$mode' })
   const map = useMapViewport()
-  const bbox = useMapViewportBbox(MAIN_MAP_ID, map)
+  const bbox = useMapViewportBbox(MAIN_MAP_ID)
   const { selectedPhoto, selectedSequenceId, viewerPov } = useSelectedPhotoForMap()
   const sign = useSelectedSign()
   const dateFilter = useMemo(
