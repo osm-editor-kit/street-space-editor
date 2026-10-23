@@ -10,7 +10,6 @@
   "ignore": [
     "@osm-editor-kit/street-space-editor",
     "@osm-editor-kit/osm-changeset",
-    "@osm-editor-kit/osm-editor-links",
     "@osm-editor-kit/osm-lane-diagram",
     "@osm-editor-kit/osm-lanes",
     "@osm-editor-kit/osm-oauth",

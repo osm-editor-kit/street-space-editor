@@ -154,7 +154,6 @@
       "version": "0.0.0",
       "dependencies": {
         "@osm-editor-kit/osm-data": "workspace:*",
-        "axios": "^1.11.0",
       },
       "devDependencies": {
         "bun-types": "^1.2.20",
@@ -310,7 +309,7 @@
     },
     "packages/street-imagery": {
       "name": "@osm-editor-kit/street-imagery",
-      "version": "0.1.0-alpha.9",
+      "version": "0.1.0-alpha.10",
       "dependencies": {
         "@mapbox/vector-tile": "^3.0.0",
         "date-fns": "^4.4.0",
@@ -327,7 +326,7 @@
     },
     "packages/street-imagery-react": {
       "name": "@osm-editor-kit/street-imagery-react",
-      "version": "0.1.0-alpha.12",
+      "version": "0.1.0-alpha.13",
       "devDependencies": {
         "@babel/core": "^7.29.7",
         "@panoramax/web-viewer": "^5",

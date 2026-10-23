@@ -1,12 +1,38 @@
 # `@osm-editor-kit/osm-editor-links`
 
-**Status:** Private (monorepo-only). Eventual npm alpha planned.
+> [!NOTE]
+> This package is an **alpha** release and still under active development. APIs may change; install with the npm `alpha` dist-tag.
 
 ## What it does
 
-Build deep links and host constants for OSM editing workflows: osm.org element and changeset URLs, web editors (iD, Rapid, Kyle Kiwi), JOSM remote control, OSM API map downloads, Mapillary, OSM Deep History, OSMCha, and TILDA inspector URLs. Includes OSM type helpers and a JOSM link-click handler.
+- Link lists for one OSM element, one changeset or one user: the OSM website, history, editors, viewers and JOSM, with a stable `id` and an English label per link
+- `linksIn` keeps the links offered at a country (for example TILDA only in Germany)
+- Deep links to osm.org element and changeset pages, web editors (iD, Rapid), JOSM remote control, OSM API map downloads, Mapillary, OSM Deep History, OSMCha and TILDA inspector URLs
+- OSM type helpers and a JOSM link-click handler
 
-## Usage
+## Link lists
+
+```ts
+import { elementLinks, changesetLinks, userLinks, linksIn } from '@osm-editor-kit/osm-editor-links'
+
+elementLinks({ type: 'way', id: 123, loc: { lat: 52.5, lng: 13.4 } })
+// osm-history, osm, deep-history, pewu, id, rapid, josm, level0,
+// mapillary, panoramax, tilda (tilda only with countries ['de'])
+
+changesetLinks({ id: 42 }) // osm-changeset, osmcha, achavi, resultmaps, osm-revert, josm, level0
+userLinks({ name: 'Anna Müller' }) // osm-user, hdyc, osmcha-user, missingmaps
+```
+
+Each link is `{ id, label, url, countries?, josm? }`. Apps translate by `id` and fall back to `label`. A link with `josm: true` opens with `handleJosmLinkClick` (JOSM remote control) instead of a new tab.
+
+Pass `server` to edit on another OSM website, for example the development server `https://master.apis.dev.openstreetmap.org`. The default is `https://www.openstreetmap.org`. Other servers get only their own links (element history and object page, changeset page, user profile); third-party tools only read production data.
+
+```ts
+const links = elementLinks({ type: 'way', id: 123, loc: { lat: 52.5, lng: 13.4 } })
+const offered = linksIn(links, ['de']) // keeps TILDA; with ['fr'] it is dropped
+```
+
+## Other helpers
 
 ```ts
 import {
@@ -38,7 +64,7 @@ tildaInspectorUrl({
   features: { sourceId: 'atlas_bikelanes', featureId: 123, coords: [13.44, 52.47] },
 })
 
-await handleJosmLinkClick(event) // JOSM remote-control link click
+await handleJosmLinkClick(event) // JOSM remote-control link click (fetches the link, no navigation)
 ```
 
 Depends on `@osm-editor-kit/osm-data` for shared map bounds and OSM object types.

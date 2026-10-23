@@ -11,6 +11,7 @@ export const ROOT = join(import.meta.dirname, '..')
 export const WAVE_PACKAGES = [
   '@osm-editor-kit/osm-coverage',
   '@osm-editor-kit/osm-data',
+  '@osm-editor-kit/osm-editor-links',
   '@osm-editor-kit/osm-map-url',
   '@osm-editor-kit/osm-maplibre',
   '@osm-editor-kit/osm-route-snapper',
@@ -24,6 +25,7 @@ export type WavePackage = (typeof WAVE_PACKAGES)[number]
 export const DIR_BY_NAME: Record<WavePackage, string> = {
   '@osm-editor-kit/osm-coverage': 'packages/osm-coverage',
   '@osm-editor-kit/osm-data': 'packages/osm-data',
+  '@osm-editor-kit/osm-editor-links': 'packages/osm-editor-links',
   '@osm-editor-kit/osm-map-url': 'packages/osm-map-url',
   '@osm-editor-kit/osm-maplibre': 'packages/osm-maplibre',
   '@osm-editor-kit/osm-route-snapper': 'packages/osm-route-snapper',

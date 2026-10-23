@@ -6,19 +6,22 @@ export type OsmTypeId = {
   osmId: number | string | null | undefined
 }
 
-/** `https://www.openstreetmap.org/{type}/{id}` */
-export function osmOrgUrl({ osmType, osmId }: OsmTypeId): string | undefined {
+/** `https://www.openstreetmap.org/{type}/{id}` (or the same path on `server`). */
+export function osmOrgUrl({ osmType, osmId }: OsmTypeId, server = osmProdUrl): string | undefined {
   if (!osmType || osmId == null || osmId === '') return undefined
-  return `${osmProdUrl}/${osmType}/${osmId}`
+  return `${server}/${osmType}/${osmId}`
 }
 
-/** OSM website object history page. */
-export function osmObjectHistoryUrl({ osmType, osmId }: OsmTypeId): string | undefined {
+/** OSM website object history page (`…/{type}/{id}/history`, or on `server`). */
+export function osmObjectHistoryUrl(
+  { osmType, osmId }: OsmTypeId,
+  server = osmProdUrl,
+): string | undefined {
   if (!osmType || osmId == null || osmId === '') return undefined
-  return `${osmProdUrl}/${osmType}/${osmId}/history`
+  return `${server}/${osmType}/${osmId}/history`
 }
 
-/** `https://www.openstreetmap.org/changeset/{id}` */
-export function osmChangesetUrl(changesetId: number | string): string {
-  return `${osmProdUrl}/changeset/${changesetId}`
+/** `https://www.openstreetmap.org/changeset/{id}` (or the same path on `server`). */
+export function osmChangesetUrl(changesetId: number | string, server = osmProdUrl): string {
+  return `${server}/changeset/${changesetId}`
 }

@@ -1,21 +1,48 @@
 {
   "name": "@osm-editor-kit/osm-editor-links",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0-alpha.0",
+  "description": "OpenStreetMap link lists for elements, changesets and users (editors, history, viewers, imagery), with JOSM remote-control helpers.",
+  "homepage": "https://github.com/osmberlin/street-space-editor/tree/main/packages/osm-editor-links",
+  "license": "MIT",
+  "author": "Tobias Jordans",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osmberlin/street-space-editor.git",
+    "directory": "packages/osm-editor-links"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha"
+  },
   "scripts": {
+    "build": "tsup && rm -f .tsbuildinfo && tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
-    "test-run": "bun test src/test"
+    "test-run": "bun test src/test",
+    "prepublishOnly": "bun run build && bun ../../scripts/package-exports-for-publish.ts",
+    "postpublish": "bun ../../scripts/package-exports-restore.ts",
+    "prepack": "bun ../../scripts/package-exports-for-publish.ts",
+    "postpack": "bun ../../scripts/package-exports-restore.ts"
   },
   "dependencies": {
-    "@osm-editor-kit/osm-data": "workspace:*",
-    "axios": "^1.11.0"
+    "@osm-editor-kit/osm-data": "workspace:*"
   },
   "devDependencies": {
     "bun-types": "^1.2.20",
     "typescript": "^7.0.0"
+  },
+  "publishExports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   }
 }

@@ -19,6 +19,16 @@ export {
   tildaGeoBase,
 } from './hosts'
 export { handleJosmLinkClick } from './josm'
+export {
+  changesetLinks,
+  elementLinks,
+  linksIn,
+  userLinks,
+  type ChangesetLinksOptions,
+  type ElementLinksOptions,
+  type OsmLink,
+  type UserLinksOptions,
+} from './link-lists'
 export { getUrl } from './map-download-url'
 export { mapillaryRecentPanosUrl, mapillaryUrl, type MapillaryUrlOptions } from './mapillary'
 export { osmChangesetUrl, osmObjectHistoryUrl, osmOrgUrl, type OsmTypeId } from './osm-object'
