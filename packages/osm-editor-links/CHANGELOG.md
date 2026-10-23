@@ -1,5 +1,11 @@
 # @osm-editor-kit/osm-editor-links
 
+## 0.1.0-alpha.2
+
+### Patch Changes
+
+- `handleJosmLinkClick` cancels the navigation before it calls JOSM; before, the browser followed the link to 127.0.0.1:8111.
+
 ## 0.1.0-alpha.1
 
 ### Patch Changes

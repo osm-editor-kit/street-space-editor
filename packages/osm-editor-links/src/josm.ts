@@ -8,6 +8,7 @@
 export async function handleJosmLinkClick(e: Event): Promise<void> {
   const anchor = e.target instanceof Element ? e.target.closest('a') : null
   if (!anchor) return
-  await fetch(anchor.href)
+  // before the await: once the handler yields, the browser has already followed the link
   e.preventDefault()
+  await fetch(anchor.href)
 }
