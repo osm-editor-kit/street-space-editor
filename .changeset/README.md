@@ -41,7 +41,7 @@ flowchart TD
 3. Land it with finish-work.
 4. `git push` — pre-push runs `packages:changeset --check` and fails when a wave package changed without a pending changeset. Nothing is written or committed by the hook.
 
-A commit counts as released once a later version commit exists (a commit that changes `.changeset/pre.json`). Only unpushed commits after it need a pending changeset.
+A commit counts as released once a later version commit exists (a commit that changes `.changeset/pre.json`). For a single package, a later commit that changes the `version` in its `package.json` counts too, so a package versioned and published by hand needs no extra changeset. Only unpushed commits after it need a pending changeset.
 
 Bypass (rare, e.g. test-only changes): `git push --no-verify`.
 

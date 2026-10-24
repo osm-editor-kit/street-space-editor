@@ -20,6 +20,7 @@ import {
   type WavePackage,
   commitsTouchingPackage,
   defaultGitRange,
+  packageReleaseRange,
   DIR_BY_NAME,
   packagesMentionedInPendingChangesets,
   shortPackageName,
@@ -128,7 +129,7 @@ function buildChangesetMarkdown(packages: WavePackage[], range: string): string 
 
   const sections = packages.map((name) => {
     const dir = DIR_BY_NAME[name]
-    const notes = commitsTouchingPackage(dir, range)
+    const notes = commitsTouchingPackage(dir, packageReleaseRange(name, range))
     return `### ${name}\n\n${formatCommitBullets(notes)}`
   })
 

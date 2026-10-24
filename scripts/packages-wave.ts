@@ -84,22 +84,40 @@ export function wavePackageForPath(path: string): WavePackage | null {
   return null
 }
 
+/**
+ * Narrows `range` for one package: a commit that changes the package's `version` field released
+ * it, also when it was versioned and published by hand outside `changeset version`.
+ */
+export function packageReleaseRange(name: WavePackage, range = defaultGitRange()): string {
+  const releaseCommit = gitCapture([
+    'log',
+    '-1',
+    '--format=%H',
+    '-G',
+    '"version":',
+    range,
+    '--',
+    `${DIR_BY_NAME[name]}/package.json`,
+  ]).stdout.trim()
+  return releaseCommit ? `${releaseCommit}..HEAD` : range
+}
+
 export function wavePackagesTouchedInDiff(range = defaultGitRange()): WavePackage[] {
-  const result = gitCapture(['diff', '--name-only', range])
-  if (result.status !== 0) {
+  return WAVE_PACKAGES.filter((name) => {
+    const result = gitCapture([
+      'diff',
+      '--name-only',
+      packageReleaseRange(name, range),
+      '--',
+      DIR_BY_NAME[name],
+    ])
     // Empty range (no commits) is fine
-    if (result.stderr.includes('unknown revision') || result.stderr.includes('bad revision')) {
-      return []
-    }
-  }
-  const touched = new Set<WavePackage>()
-  for (const line of result.stdout.split('\n')) {
-    const path = line.trim()
-    if (!path) continue
-    const pkg = wavePackageForPath(path)
-    if (pkg) touched.add(pkg)
-  }
-  return WAVE_PACKAGES.filter((name) => touched.has(name))
+    if (result.status !== 0) return false
+    return result.stdout.split('\n').some((line) => {
+      const path = line.trim()
+      return path !== '' && wavePackageForPath(path) === name
+    })
+  })
 }
 
 export type CommitNote = { subject: string; body: string }
