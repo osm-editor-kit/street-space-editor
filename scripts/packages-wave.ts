@@ -16,8 +16,6 @@ export const WAVE_PACKAGES = [
   '@osm-editor-kit/osm-maplibre',
   '@osm-editor-kit/osm-route-snapper',
   '@osm-editor-kit/osm-way-chain',
-  '@osm-editor-kit/street-imagery',
-  '@osm-editor-kit/street-imagery-react',
 ] as const
 
 export type WavePackage = (typeof WAVE_PACKAGES)[number]
@@ -30,8 +28,6 @@ export const DIR_BY_NAME: Record<WavePackage, string> = {
   '@osm-editor-kit/osm-maplibre': 'packages/osm-maplibre',
   '@osm-editor-kit/osm-route-snapper': 'packages/osm-route-snapper',
   '@osm-editor-kit/osm-way-chain': 'packages/osm-way-chain',
-  '@osm-editor-kit/street-imagery': 'packages/street-imagery',
-  '@osm-editor-kit/street-imagery-react': 'packages/street-imagery-react',
 }
 
 export function isWavePackage(name: string): name is WavePackage {
