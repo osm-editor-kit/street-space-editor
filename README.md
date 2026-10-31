@@ -1,6 +1,6 @@
 # Street Space Editor for OpenStreetMap
 
-- [Open the editor](https://osmberlin.github.io/street-space-editor/?zoom=16&lat=52.4751&lng=13.4435)
+- [Open the editor](https://osm-editor-kit.github.io/street-space-editor/?zoom=16&lat=52.4751&lng=13.4435)
 - Learn more about the project [in the launch post](https://www.openstreetmap.org/user/acsd/diary/45026).
 
 One app with a shared OSM shell (auth, fetch, changeset upload) and **modes** for visualization and editing:
@@ -64,8 +64,8 @@ Flat audit pages (no mode chrome) for reviewing interpretation rules and fixture
 
 **Deployed:**
 
-- https://osmberlin.github.io/street-space-editor/audit-width
-- https://osmberlin.github.io/street-space-editor/audit-lanes/one-lane-each-way
+- https://osm-editor-kit.github.io/street-space-editor/audit-width
+- https://osm-editor-kit.github.io/street-space-editor/audit-lanes/one-lane-each-way
 
 ## Install git hook
 

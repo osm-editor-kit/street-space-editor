@@ -4,7 +4,7 @@
   "private": true,
   "description": "Street Space Editor for OpenStreetMap",
   "keywords": [],
-  "homepage": "https://osmberlin.github.io/street-space-editor/",
+  "homepage": "https://osm-editor-kit.github.io/street-space-editor/",
   "license": "MIT",
   "author": "Zlant",
   "type": "module",

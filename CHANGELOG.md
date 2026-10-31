@@ -11,6 +11,10 @@ on every commit — bump intentionally when cutting a named release (see README 
 
 ## [Unreleased]
 
+### Changed
+
+- The editor moved to [osm-editor-kit.github.io/street-space-editor](https://osm-editor-kit.github.io/street-space-editor/). Old links to osmberlin.github.io no longer work, and you need to log in to OSM again.
+
 ## [0.9.0] - 2026-07-28
 
 ### Added
