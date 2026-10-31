@@ -1,24 +1,8 @@
 export { fillEditorUrlTemplate, type EditorUrlTemplateVars } from './editor-template'
-export {
-  idEditorUrl,
-  josmImportUrl,
-  josmLoadObjectUrl,
-  josmUrl,
-  osmEditIdUrl,
-  osmEditKyleKiwiIdUrl,
-  osmEditRapidUrl,
-} from './editors'
+export { idEditorUrl, josmImportUrl, josmLoadObjectUrl, osmEditIdUrl } from './editors'
 export { osmDeepHistoryUrl } from './history'
-export {
-  josmRemoteBase,
-  osmchaBase,
-  osmDeepHistoryBase,
-  osmDevUrl,
-  osmProdApiUrl,
-  osmProdUrl,
-  tildaGeoBase,
-} from './hosts'
-export { handleJosmLinkClick } from './josm'
+export { osmDevUrl, osmProdApiUrl, osmProdUrl } from './hosts'
+export { handleJosmLinkClick, type JosmClickEvent } from './josm'
 export {
   changesetLinks,
   elementLinks,
@@ -32,14 +16,7 @@ export {
 export { getUrl } from './map-download-url'
 export { mapillaryRecentPanosUrl, mapillaryUrl, type MapillaryUrlOptions } from './mapillary'
 export { osmChangesetUrl, osmObjectHistoryUrl, osmOrgUrl, type OsmTypeId } from './osm-object'
-export {
-  longOsmType,
-  shortOsmType,
-  toLongOsmType,
-  toShortOsmType,
-  type OsmObjectType,
-  type OsmShortType,
-} from './osm-type'
+export { toLongOsmType, toShortOsmType, type OsmObjectType, type OsmShortType } from './osm-type'
 export {
   osmchaChangesetUrl,
   osmchaFiltersUrl,
@@ -48,17 +25,11 @@ export {
 } from './osmcha'
 export {
   serializeTildaFeaturesParam,
-  TILDA_INFRA_PRESETS,
-  TILDA_SOURCE_NUMERIC_IDS,
-  tildaInfraSourceNumericId,
   tildaInspectorUrl,
   tildaInspectorUrlForInfra,
-  tildaSourceIdFromNumeric,
-  tildaSourceNumericId,
   type TildaFeatureCoord,
   type TildaFeatureParam,
   type TildaInfra,
-  type TildaInfraPreset,
   type TildaInspectorForInfraOptions,
   type TildaInspectorUrlOptions,
   type TildaMapPosition,

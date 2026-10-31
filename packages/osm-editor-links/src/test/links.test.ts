@@ -2,6 +2,7 @@ import { describe, expect, test } from 'bun:test'
 import {
   fillEditorUrlTemplate,
   idEditorUrl,
+  josmImportUrl,
   josmLoadObjectUrl,
   mapillaryRecentPanosUrl,
   mapillaryUrl,
@@ -16,11 +17,12 @@ import {
   osmProdApiUrl,
   osmProdUrl,
   serializeTildaFeaturesParam,
-  TILDA_INFRA_PRESETS,
   tildaInspectorUrl,
   tildaInspectorUrlForInfra,
-  tildaSourceNumericId,
+  toLongOsmType,
+  toShortOsmType,
 } from '../index'
+import { tildaSourceNumericId } from '../tilda/sources'
 
 describe('editor links', () => {
   test('exports OSM website and API URLs', () => {
@@ -73,10 +75,64 @@ describe('editor links', () => {
     expect(url).toContain('comment=fix+parking')
   })
 
-  test('josmLoadObjectUrl builds remote-control load_object', () => {
-    expect(josmLoadObjectUrl({ osmType: 'way', osmId: 99 })).toBe(
-      'http://127.0.0.1:8111/load_object?objects=w99&changeset_hashtags=TILDA',
+  test('idEditorUrl without a place or object only sets the defaults', () => {
+    expect(idEditorUrl({ background: 'Bing' })).toBe(
+      'https://ideditor-release.netlify.app/#disable_features=boundaries&photo_overlay=streetside%2Cmapillary%2Ckartaview&background=Bing',
     )
+  })
+
+  test('osmEditIdUrl returns undefined without type or id, and adds comment and source', () => {
+    expect(osmEditIdUrl({ osmType: undefined, osmId: 1 })).toBeUndefined()
+    expect(osmEditIdUrl({ osmType: 'way', osmId: '' })).toBeUndefined()
+    expect(osmEditIdUrl({ osmType: 'node', osmId: 5 })).toBe(
+      'https://www.openstreetmap.org/edit?node=5',
+    )
+    expect(osmEditIdUrl({ osmType: 'node', osmId: 5, source: 'survey' })).toBe(
+      'https://www.openstreetmap.org/edit?node=5#source=survey',
+    )
+  })
+
+  test('josmLoadObjectUrl builds remote-control load_object without default hashtags', () => {
+    expect(josmLoadObjectUrl({ osmType: 'way', osmId: 99 })).toBe(
+      'http://127.0.0.1:8111/load_object?objects=w99',
+    )
+    expect(josmLoadObjectUrl({ osmType: 'way', osmId: 99, changesetHashtags: '#a' })).toBe(
+      'http://127.0.0.1:8111/load_object?objects=w99&changeset_hashtags=%23a',
+    )
+    expect(josmLoadObjectUrl({ osmType: null, osmId: 99 })).toBeUndefined()
+  })
+
+  test('josmImportUrl appends the url to the remote-control import', () => {
+    expect(josmImportUrl('https://example.org/data.osm')).toBe(
+      'http://127.0.0.1:8111/import?url=https://example.org/data.osm',
+    )
+  })
+
+  test('mapillaryUrl options: no traffic signs, dates, panos and zoom', () => {
+    expect(
+      mapillaryUrl(
+        { lat: 1, lng: 2 },
+        {
+          trafficSign: false,
+          zoom: 20,
+          dateFrom: '2024-01-01',
+          dateTo: '2024-02-01',
+          panosOnly: true,
+        },
+      ),
+    ).toBe(
+      'https://www.mapillary.com/app/?lat=1&lng=2&z=20&focus=map&dateFrom=2024-01-01&dateTo=2024-02-01&panos=true',
+    )
+  })
+
+  test('OSM type conversion accepts short, long and upper-case forms', () => {
+    expect(toShortOsmType('way')).toBe('w')
+    expect(toShortOsmType('R')).toBe('r')
+    expect(toShortOsmType('x')).toBeUndefined()
+    expect(toLongOsmType('n')).toBe('node')
+    expect(toLongOsmType('W')).toBe('way')
+    expect(toLongOsmType('relation')).toBe('relation')
+    expect(toLongOsmType('')).toBeUndefined()
   })
 
   test('fillEditorUrlTemplate replaces placeholders', () => {
@@ -132,8 +188,7 @@ describe('tilda inspector deeplinks', () => {
   test('source numeric ids for infra presets', () => {
     expect(tildaSourceNumericId('atlas_bikelanes')).toBe(10)
     expect(tildaSourceNumericId('lars_parking')).toBe(2)
-    expect(TILDA_INFRA_PRESETS.bikelanes.regionSlug).toBe('radinfra')
-    expect(TILDA_INFRA_PRESETS.parking.regionSlug).toBe('parkraum')
+    expect(tildaSourceNumericId('unknown')).toBeUndefined()
   })
 
   test('serializeTildaFeaturesParam point and bbox', () => {
@@ -200,10 +255,21 @@ describe('tilda inspector deeplinks', () => {
     const url = tildaInspectorUrl({
       regionSlug: 'parkraum',
       map: { zoom: 15, lat: 50.711, lng: 7.0917 },
-      config: TILDA_INFRA_PRESETS.parking.defaultConfig,
+      config: 'abc',
     })
     expect(url).toContain('/regionen/parkraum?')
     expect(url).not.toContain('f=')
     expect(url).toContain('v=2')
+  })
+
+  test('a config option overrides the preset, a viewport-only infra link omits f', () => {
+    const url = tildaInspectorUrlForInfra('bikelanes', {
+      map: { zoom: 10, lat: 1, lng: 2 },
+      config: 'mine',
+      baseUrl: 'https://staging.example.org',
+    })
+    expect(url.startsWith('https://staging.example.org/regionen/radinfra?')).toBe(true)
+    expect(url).toContain('config=mine')
+    expect(url).not.toContain('f=')
   })
 })

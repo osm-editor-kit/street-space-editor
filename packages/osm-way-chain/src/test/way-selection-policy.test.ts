@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import {
   buildWaysOverpassQuery,
+  compileOverpassWaySelector,
   compileOverpassWaySelectors,
   matchesOsmWaySelection,
   tag,
@@ -61,7 +62,51 @@ describe('compileOverpassWaySelectors', () => {
   })
 })
 
+describe('compileOverpassWaySelector', () => {
+  it('compiles every predicate kind for a single include clause', () => {
+    const selector = compileOverpassWaySelector({
+      include: [
+        {
+          all: [
+            tag.regex('highway', '^(primary|secondary)(_link)?$'),
+            tag.nregex('name', 'weg$'),
+            tag.present('lanes'),
+            tag.absent('area'),
+            tag.noneOf('service', ['driveway', 'parking_aisle']),
+            tag.eq('name:de', 'Straße des 17. Juni'),
+          ],
+        },
+      ],
+    })
+
+    expect(selector).toBe(
+      '[highway~"^(primary|secondary)(_link)?$"][name!~"weg$"][lanes][!area]' +
+        '[service!~"^(driveway|parking_aisle)$"][name:de="Straße des 17. Juni"]',
+    )
+  })
+
+  it('throws unless the policy has exactly one include clause', () => {
+    expect(() => compileOverpassWaySelector({ include: [] })).toThrow()
+    expect(() =>
+      compileOverpassWaySelector({
+        include: [{ all: [tag.eq('highway', 'steps')] }, { all: [tag.eq('highway', 'path')] }],
+      }),
+    ).toThrow()
+  })
+})
+
 describe('matchesOsmWaySelection', () => {
+  it('treats a missing tag like Overpass for nregex, present and absent', () => {
+    const policy: OsmWaySelectionPolicy = {
+      include: [{ all: [tag.nregex('name', 'weg$'), tag.present('lanes'), tag.absent('area')] }],
+    }
+    expect(matchesOsmWaySelection({ lanes: '2' }, policy)).toBe(true)
+    expect(matchesOsmWaySelection({ lanes: '2', name: 'Hauptstraße' }, policy)).toBe(true)
+    expect(matchesOsmWaySelection({ lanes: '2', name: 'Feldweg' }, policy)).toBe(false)
+    expect(matchesOsmWaySelection({ name: 'Hauptstraße' }, policy)).toBe(false)
+    expect(matchesOsmWaySelection({ lanes: '2', area: 'yes' }, policy)).toBe(false)
+  })
+
   it('includes bike and foot infra, excludes private and bare sidewalks', () => {
     expect(matchesOsmWaySelection({ highway: 'cycleway' }, bikeFootPolicy)).toBe(true)
     expect(matchesOsmWaySelection({ highway: 'steps' }, bikeFootPolicy)).toBe(true)

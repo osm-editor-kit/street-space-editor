@@ -1,3 +1,5 @@
+import type { OsmTags } from '@osm-editor-kit/osm-data'
+
 const LEFT_RIGHT_RE = /:(left|right)(:|$)/g
 const FORWARD_BACKWARD_RE = /:(forward|backward)(:|$)/g
 const START_END_RE = /:(start|end)(:|$)/g
@@ -96,7 +98,7 @@ function parsePositiveInt(value: string | undefined): number | undefined {
   return Number.isFinite(n) && n > 0 ? n : undefined
 }
 
-function laneCountForPlacement(tags: Record<string, string>): number {
+function laneCountForPlacement(tags: OsmTags): number {
   const lanes = parsePositiveInt(tags.lanes)
   if (lanes != null) return lanes
   const fwd = parsePositiveInt(tags['lanes:forward']) ?? 0
@@ -136,12 +138,7 @@ function isBareSideKey(key: string): boolean {
   return lower === 'sidewalk' || lower === 'cycleway' || lower === 'busway'
 }
 
-function mirrorTagValue(
-  key: string,
-  value: string,
-  tags: Record<string, string>,
-  laneCount: number,
-): string {
+function mirrorTagValue(key: string, value: string, laneCount: number): string {
   if (isOnewayKey(key)) return mirrorOnewayValue(value)
   if (isPlacementKey(key)) return mirrorPlacementValue(value, laneCount)
   if (isBareSideKey(key)) return mirrorBareSideValue(value)
@@ -153,13 +150,13 @@ function mirrorTagValue(
  * Mirror OSM tags as if the way were digitised in the opposite direction.
  * Applying twice returns the original tags (deep equality).
  */
-export function mirrorTags(tags: Record<string, string>): Record<string, string> {
+export function mirrorTags(tags: OsmTags): OsmTags {
   const laneCount = laneCountForPlacement(tags)
-  const mirrored: Record<string, string> = {}
+  const mirrored: OsmTags = {}
 
   for (const [key, value] of Object.entries(tags)) {
     const mirroredKey = mirrorDirectionalKey(key)
-    mirrored[mirroredKey] = mirrorTagValue(key, value, tags, laneCount)
+    mirrored[mirroredKey] = mirrorTagValue(key, value, laneCount)
   }
 
   return mirrored

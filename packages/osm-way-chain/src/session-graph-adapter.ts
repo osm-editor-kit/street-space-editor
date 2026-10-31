@@ -16,6 +16,7 @@ function wayCoordinates(
     .filter((coord): coord is [number, number] => coord != null)
 }
 
+/** Nodes without coordinates in `nodeCoords` are left out of the geometry. */
 export function osmWayToSegment(way: OsmWay, nodeCoords: ParsedOsmData['nodeCoords']): Segment {
   return {
     id: way.id,
@@ -45,7 +46,7 @@ function buildNodeWayIndex(graph: ParsedOsmData): Map<number, number[]> {
 }
 
 /**
- * Adapter backed by an already-loaded session graph (bbox coverage data).
+ * Adapter backed by already loaded `ParsedOsmData`.
  * Lookups are synchronous but wrapped in Promises to satisfy `OsmDataAdapter`.
  */
 export function createSessionGraphAdapter(graph: ParsedOsmData): OsmDataAdapter {

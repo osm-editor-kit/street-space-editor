@@ -11,14 +11,5 @@
     "incremental": false
   },
   "include": ["src/**/*.ts"],
-  "exclude": [
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "src/test/**",
-    "src/dev-osm-map-fixture/create-map-fixture-handler.ts",
-    "src/dev-osm-map-fixture/fixture-index.ts",
-    "src/dev-osm-map-fixture/index.ts",
-    "src/dev-osm-map-fixture/filter-elements-by-bbox.ts",
-    "src/dev-osm-map-fixture/types.ts"
-  ]
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**"]
 }

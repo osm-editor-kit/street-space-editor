@@ -2,8 +2,8 @@ import { describe, expect, test } from 'bun:test'
 import {
   filterElementsByBbox,
   type OsmMapFixtureIndex,
-} from '../dev-osm-map-fixture/filter-elements-by-bbox'
-import type { OsmMapElement } from '../dev-osm-map-fixture/types'
+} from '../dev/osm-map-fixture/filter-elements-by-bbox'
+import type { OsmMapElement } from '../dev/osm-map-fixture/types'
 
 function buildTestIndex(elements: OsmMapElement[]): OsmMapFixtureIndex {
   const nodesById = new Map<number, OsmMapElement>()

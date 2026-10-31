@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'bun:test'
 import { emptyParsedOsmData, mergeParsedOsm, parseOsmResp } from '../data-client'
-import type { OsmWay } from '../types/osm-data'
 
 describe('mergeParsedOsm', () => {
   test('merges nodes and keeps newer way versions', () => {
@@ -79,13 +78,3 @@ describe('parseOsmResp', () => {
     expect(parsed.waysInRelation[42]).toBe(true)
   })
 })
-
-function makeWay(
-  id: number,
-  version: number,
-  tags: OsmWay['tags'] = { highway: 'residential' },
-): OsmWay {
-  return { type: 'way', id, version, nodes: [1, 2, 3], tags }
-}
-
-export { makeWay }

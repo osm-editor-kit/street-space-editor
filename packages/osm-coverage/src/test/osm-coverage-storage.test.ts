@@ -8,7 +8,6 @@ import {
   type OsmCoveragePersisted,
   type OsmCoverageStorage,
 } from '../osm-coverage-storage'
-import { OsmDataSource } from '../osm-data-source'
 
 const viewport: MapBounds = {
   south: 52.47,
@@ -21,7 +20,7 @@ const mapSizePx = { width: 1000, height: 800 }
 
 type TestSessionParams = {
   editorMode: boolean
-  osmDataSource: OsmDataSource
+  osmDataSource: string
 }
 
 function createMemoryStorage() {
@@ -59,8 +58,8 @@ describe('formatCoverageAgeHour', () => {
 describe('coverage storage', () => {
   test('restores session from storage before ensureCoverage skips covered viewport', async () => {
     const { storage, store } = createMemoryStorage()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
-    const sessionKey = ['test-osm-persist', false, OsmDataSource.OverpassVk] as const
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
+    const sessionKey = ['test-osm-persist', false, 'overpass-vk'] as const
 
     store.set(JSON.stringify(sessionKey), {
       graph: emptyParsedOsmData(),
@@ -102,8 +101,8 @@ describe('coverage storage', () => {
 
   test('saves session after a successful fetch', async () => {
     const { storage, store } = createMemoryStorage()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
-    const sessionKey = ['test-osm-save', false, OsmDataSource.OverpassVk] as const
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
+    const sessionKey = ['test-osm-save', false, 'overpass-vk'] as const
 
     const api = createOsmCoverageApi<TestSessionParams>({
       getSessionKey: ({ editorMode, osmDataSource }) =>
@@ -130,10 +129,38 @@ describe('coverage storage', () => {
     expect(persisted?.savedAt).toBeTruthy()
   })
 
+  test('reports a failed save through onPersistError', async () => {
+    const { storage } = createMemoryStorage()
+    const failure = new Error('disk full')
+    const errors: unknown[] = []
+
+    const api = createOsmCoverageApi<TestSessionParams>({
+      getSessionKey: ({ editorMode, osmDataSource }) =>
+        ['test-osm-save-error', editorMode, osmDataSource] as const,
+      minZoom: 14,
+      getDownloadUrl: () => 'https://example.test/overpass',
+      download: async () => emptyParsedOsmData(),
+      storage: { ...storage, save: async () => Promise.reject(failure) },
+      storageSaveDebounceMs: 0,
+      onPersistError: (error) => errors.push(error),
+    })
+
+    await api.ensureCoverage(new QueryClient(), {
+      bounds: viewport,
+      zoom: 18,
+      mapSizePx,
+      editorMode: false,
+      osmDataSource: 'overpass-vk',
+    })
+
+    await Bun.sleep(20)
+    expect(errors).toEqual([failure])
+  })
+
   test('clearPersisted removes durable data', async () => {
     const { storage, store } = createMemoryStorage()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
-    const sessionKey = ['test-osm-clear', false, OsmDataSource.OverpassVk] as const
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
+    const sessionKey = ['test-osm-clear', false, 'overpass-vk'] as const
 
     store.set(JSON.stringify(sessionKey), {
       graph: emptyParsedOsmData(),

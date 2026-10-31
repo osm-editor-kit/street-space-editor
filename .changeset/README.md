@@ -1,13 +1,14 @@
-# Kit package versioning & alpha publish
+# Kit package versioning & publish
 
 This monorepo uses [Changesets](https://github.com/changesets/changesets) for versions. Interactive `bunx changeset` is **not** the happy path — use the scripts below.
 
-Wave packages always bump **`patch`** while in alpha. npm dist-tag: **`alpha`**.
+Wave packages are stable (1.0.0 and up) and follow semver: `patch` for fixes, `minor` for new features, `major` for breaking changes. npm dist-tag: **`latest`**.
 
 ## Wave packages
 
 - `@osm-editor-kit/osm-coverage`
 - `@osm-editor-kit/osm-data`
+- `@osm-editor-kit/osm-editor-links`
 - `@osm-editor-kit/osm-map-url`
 - `@osm-editor-kit/osm-maplibre`
 - `@osm-editor-kit/osm-route-snapper`
@@ -37,15 +38,15 @@ flowchart TD
 ## Day to day
 
 1. Edit a wave package.
-2. Write a changeset in the same commit: `.changeset/<descriptive-name>.md` with `"<package>": patch` frontmatter and 1–4 user-facing bullets (what consumers get, not file lists). `bun run packages:changeset -- <name>` scaffolds the file from the commit messages.
+2. Write a changeset in the same commit: `.changeset/<descriptive-name>.md` with `"<package>": patch` (or `minor` / `major`) frontmatter and 1–4 user-facing bullets (what consumers get, not file lists). `bun run packages:changeset -- <name>` scaffolds the file from the commit messages, always as `patch`: raise it when the change adds or breaks API.
 3. Land it with finish-work.
 4. `git push` — pre-push runs `packages:changeset --check` and fails when a wave package changed without a pending changeset. Nothing is written or committed by the hook.
 
-A commit counts as released once a later version commit exists (a commit that changes `.changeset/pre.json`). For a single package, a later commit that changes the `version` in its `package.json` counts too, so a package versioned and published by hand needs no extra changeset. Only unpushed commits after it need a pending changeset.
+A commit counts as released once a later version commit exists (a commit that changes `.changeset/pre.json`, from the alpha phase). For a single package, a later commit that changes the `version` in its `package.json` counts too, so a package versioned and published by hand needs no extra changeset. Only unpushed commits after it need a pending changeset.
 
 Bypass (rare, e.g. test-only changes): `git push --no-verify`.
 
-## Ship alphas
+## Ship releases
 
 ```bash
 bun run packages:release
@@ -60,11 +61,11 @@ bun run packages:check
 
 1. Refuse uncommitted wave-package edits (commit via finish-work first)
 2. Check changeset coverage (`packages:changeset --check` — same as pre-push)
-3. `changeset version` (patch bumps + CHANGELOGs) when pending changesets exist
+3. `changeset version` (version bumps + CHANGELOGs) when pending changesets exist
 4. `build:packages`
 5. Commit version bumps (does not push)
 6. Readiness checks — **already-on-npm packages are skipped** (not errors)
-7. Confirm and `npm publish --tag alpha` for packages with a new local version
+7. Confirm and `npm publish --tag latest` for packages with a new local version
 
 npm asks for 2FA on publish, which needs a terminal. Without a TTY (agents) the script stops after step 6 and prints the command to run in a terminal: `bun run packages:release -- --publish-only --yes`.
 
@@ -83,5 +84,5 @@ bun run packages:changeset -- <name>
 ## Install in other apps
 
 ```bash
-bun add @osm-editor-kit/street-imagery@alpha
+bun add @osm-editor-kit/street-imagery
 ```

@@ -30,7 +30,7 @@ describe('elementLinks', () => {
     expect(urlOf(links, 'id')).toBe('https://www.openstreetmap.org/edit?way=123')
     expect(urlOf(links, 'rapid')).toBe('https://rapideditor.org/edit#id=w123')
     expect(urlOf(links, 'josm')).toBe('http://127.0.0.1:8111/load_object?objects=w123')
-    expect(urlOf(links, 'level0')).toBe('http://level0.osmz.ru/?url=way/123')
+    expect(urlOf(links, 'level0')).toBe('https://level0.osmz.ru/?url=way/123')
   })
 
   test('node and relation use n and r in the Rapid and JOSM ids', () => {
@@ -108,7 +108,7 @@ describe('changesetLinks', () => {
     expect(urlOf(links, 'josm')).toBe(
       'http://127.0.0.1:8111/import?url=https://www.openstreetmap.org/api/0.6/changeset/42/download',
     )
-    expect(urlOf(links, 'level0')).toBe('http://level0.osmz.ru/?url=changeset/42')
+    expect(urlOf(links, 'level0')).toBe('https://level0.osmz.ru/?url=changeset/42')
     expect(links.find((item) => item.id === 'josm')?.josm).toBe(true)
   })
 

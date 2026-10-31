@@ -42,6 +42,8 @@ export type CreateOsmCoverageApiOptions<TSessionParams> = {
   storage?: OsmCoverageStorage
   /** Debounce durable writes after merges (ms). Default 500. */
   storageSaveDebounceMs?: number
+  /** Called when a debounced durable save fails. Failures are otherwise silent. */
+  onPersistError?: (error: unknown) => void
 }
 
 const DEFAULT_STORAGE_SAVE_DEBOUNCE_MS = 500
@@ -54,6 +56,7 @@ export function createOsmCoverageApi<TSessionParams>({
   isNetworkEnabled,
   storage,
   storageSaveDebounceMs = DEFAULT_STORAGE_SAVE_DEBOUNCE_MS,
+  onPersistError,
 }: CreateOsmCoverageApiOptions<TSessionParams>) {
   const getCoverageKey = (params: TSessionParams) => [...getSessionKey(params), 'coverage'] as const
   const networkEnabled = () => isNetworkEnabled?.() ?? true
@@ -88,7 +91,7 @@ export function createOsmCoverageApi<TSessionParams>({
       setTimeout(() => {
         saveTimers.delete(chainKey)
         void storage.save(sessionKey, persisted).catch((error: unknown) => {
-          console.error('Failed to persist OSM coverage session', error)
+          onPersistError?.(error)
         })
       }, storageSaveDebounceMs),
     )

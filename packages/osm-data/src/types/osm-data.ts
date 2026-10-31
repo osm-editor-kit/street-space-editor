@@ -1,6 +1,6 @@
 export type OsmTags = Record<string, string>
 
-type OsmType = 'node' | 'way' | 'relation'
+export type OsmType = 'node' | 'way' | 'relation'
 
 export interface OsmObject {
   id: number
@@ -14,7 +14,7 @@ export interface OsmObject {
   tags: OsmTags
 }
 
-interface RelationMember {
+export interface RelationMember {
   type: OsmType
   ref: number
   role: string

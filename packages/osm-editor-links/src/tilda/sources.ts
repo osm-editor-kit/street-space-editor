@@ -2,7 +2,7 @@
  * TILDA `f` parameter sourceNumericId ↔ source name.
  * Mirrors tilda-geo `useFeaturesParam/url.ts` (atlas / Lars / Mapillary / TILDA parking).
  */
-export const TILDA_SOURCE_NUMERIC_IDS: Record<number, string> = {
+const TILDA_SOURCE_NUMERIC_IDS: Record<number, string> = {
   1: 'osm_notes',
   2: 'lars_parking',
   3: 'lars_parking_debug',
@@ -43,8 +43,4 @@ const sourceIdToNumeric = new Map(
 /** Resolve TILDA source name → compact numeric id used in `f=`. */
 export function tildaSourceNumericId(sourceId: string): number | undefined {
   return sourceIdToNumeric.get(sourceId)
-}
-
-export function tildaSourceIdFromNumeric(numericId: number): string | undefined {
-  return TILDA_SOURCE_NUMERIC_IDS[numericId]
 }

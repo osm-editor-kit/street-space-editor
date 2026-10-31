@@ -27,8 +27,4 @@ export const OPENFREEMAP_POSITRON_STYLE = buildOpenFreeMapPositronStyle(
   openFreeMapPositronStyle as StyleSpecification,
 )
 
-export { appendCustomContentAnchor, patchOpenFreeMapStyle }
-export {
-  MAP_CUSTOM_CONTENT_ANCHOR_LAYER_ID,
-  MAP_CUSTOM_CONTENT_ANCHOR_SOURCE_ID,
-} from './custom-content-anchor'
+export { MAP_CUSTOM_CONTENT_ANCHOR_LAYER_ID } from './custom-content-anchor'

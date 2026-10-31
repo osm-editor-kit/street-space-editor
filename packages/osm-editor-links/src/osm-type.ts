@@ -1,7 +1,7 @@
 export type OsmObjectType = 'way' | 'node' | 'relation'
 export type OsmShortType = 'w' | 'n' | 'r'
 
-export const longOsmType: Record<string, OsmObjectType> = {
+const longOsmType: Record<string, OsmObjectType> = {
   W: 'way',
   N: 'node',
   R: 'relation',
@@ -13,7 +13,7 @@ export const longOsmType: Record<string, OsmObjectType> = {
   relation: 'relation',
 }
 
-export const shortOsmType: Record<string, OsmShortType> = {
+const shortOsmType: Record<string, OsmShortType> = {
   way: 'w',
   node: 'n',
   relation: 'r',

@@ -25,14 +25,14 @@ const roundByZoom = (number: number | string, zoom: number) => {
   return roundNumber(number, latLngPrecisionByZoom)
 }
 
-export const roundPositionForURL = (lat: number, lng: number, zoom: number) => {
+const roundPositionForURL = (lat: number, lng: number, zoom: number) => {
   lat = roundByZoom(lat, zoom)
   lng = roundByZoom(lng, zoom)
   zoom = roundNumber(zoom, 1)
   return [lat, lng, zoom] as const
 }
 
-export const parseMapParam = (query: string) => {
+export const parseMapParam = (query: string): MapParam | null => {
   const parts = query.split('/')
   if (parts.length === 3) {
     const parsed = MapParamSchema3.safeParse(parts)
@@ -50,7 +50,7 @@ export const parseMapParam = (query: string) => {
 }
 
 /** Legacy bookmark shape: `#map=zoom/lat/lng` (redirected to `?map=` on load). */
-export const parseLegacyMapHash = (hash: string) => {
+export const parseLegacyMapHash = (hash: string): MapParam | null => {
   const query = hash.startsWith('#') ? hash.slice(1) : hash
   if (!query.startsWith('map=')) return null
   return parseMapParam(query.slice('map='.length))

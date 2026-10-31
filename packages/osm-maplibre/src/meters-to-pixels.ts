@@ -1,12 +1,14 @@
+import type { ExpressionSpecification } from 'maplibre-gl'
+
 // From tilda-geo-cqi `docs/MapLibre-Line-Width-Offset-Units.md` (Germany φ=51°); adjust GERMANY_LAT / factor if targeting other regions.
 //
 // MapLibre only allows `["zoom"]` as the input to a *top-level* `interpolate` / `step`.
 // Mercator metres→pixels is `meters * 2^zoom / PIXEL_SCALE`, expressed as exponential
 // interpolate with base 2 and stops whose outputs are in ratio `2^(z1-z0)`.
 
-export const EARTH_CIRCUMFERENCE = 40075016.686
-export const TILE_SIZE = 512
-export const GERMANY_LAT = 51
+const EARTH_CIRCUMFERENCE = 40075016.686
+const TILE_SIZE = 512
+const GERMANY_LAT = 51
 
 export const PIXEL_SCALE_GERMANY = pixelScaleFactorAtLat(GERMANY_LAT)
 
@@ -14,7 +16,7 @@ export const PIXEL_SCALE_GERMANY = pixelScaleFactorAtLat(GERMANY_LAT)
 const WIDTH_ZOOM_MIN = 0
 const WIDTH_ZOOM_MAX = 22
 
-export function pixelScaleFactorAtLat(latitudeDeg: number): number {
+function pixelScaleFactorAtLat(latitudeDeg: number): number {
   return (EARTH_CIRCUMFERENCE * Math.cos((latitudeDeg * Math.PI) / 180)) / TILE_SIZE
 }
 
@@ -37,12 +39,10 @@ function scaleAtZoom(zoom: number, multiplier: number): number {
 export function lineWidthFromMeters(
   property = 'roadWidthM',
   options?: { extraMeters?: number },
-): readonly unknown[] {
+): ExpressionSpecification {
   const extraMeters = options?.extraMeters ?? 0
-  const widthExpr =
-    extraMeters === 0
-      ? (['get', property] as const)
-      : (['+', ['get', property], extraMeters] as const)
+  const widthExpr: ExpressionSpecification =
+    extraMeters === 0 ? ['get', property] : ['+', ['get', property], extraMeters]
 
   return [
     'interpolate',
@@ -64,11 +64,11 @@ export function lineOffsetFromMeters(
   property = 'roadWidthM',
   fraction = 0.5,
   options?: { sign?: unknown },
-): readonly unknown[] {
-  const metersExpr =
+): ExpressionSpecification {
+  const metersExpr: ExpressionSpecification =
     options?.sign === undefined
-      ? (['get', property] as const)
-      : (['*', ['get', property], options.sign] as const)
+      ? ['get', property]
+      : ['*', ['get', property], options.sign as ExpressionSpecification]
 
   return [
     'interpolate',

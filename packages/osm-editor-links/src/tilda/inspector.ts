@@ -4,11 +4,10 @@ import {
   type TildaFeatureCoord,
   type TildaFeatureParam,
 } from './features-param'
-import { tildaSourceNumericId } from './sources'
 
 export type TildaInfra = 'bikelanes' | 'parking'
 
-export type TildaInfraPreset = {
+type TildaInfraPreset = {
   regionSlug: string
   sourceId: string
   /** Layer visibility config; drifts in TILDA — override per call if needed. */
@@ -19,7 +18,7 @@ export type TildaInfraPreset = {
  * Infra → public TILDA region presets.
  * Roads (width/surface/lanes) have no public region — omit those callers.
  */
-export const TILDA_INFRA_PRESETS: Record<TildaInfra, TildaInfraPreset> = {
+const TILDA_INFRA_PRESETS: Record<TildaInfra, TildaInfraPreset> = {
   bikelanes: {
     regionSlug: 'radinfra',
     sourceId: 'atlas_bikelanes',
@@ -74,8 +73,7 @@ export type TildaInspectorForInfraOptions = {
 
 /**
  * Build inspector URL for a known infra preset.
- * Returns viewport-only URL when `featureId`/`coords` are omitted.
- * Returns `null` only when map position is incomplete (should not happen with typed input).
+ * Returns a viewport-only URL when `featureId`/`coords` are omitted.
  */
 export function tildaInspectorUrlForInfra(
   infra: TildaInfra,
@@ -99,8 +97,4 @@ export function tildaInspectorUrlForInfra(
     version: options.version,
     baseUrl: options.baseUrl,
   })
-}
-
-export function tildaInfraSourceNumericId(infra: TildaInfra): number | undefined {
-  return tildaSourceNumericId(TILDA_INFRA_PRESETS[infra].sourceId)
 }

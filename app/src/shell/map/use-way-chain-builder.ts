@@ -78,14 +78,10 @@ export function useWayChainBuilder({
     const adapter = createSessionGraphAdapter(graph)
     const candidateFilter = (segment: Segment) =>
       matchesStreetSpaceWaySegment(segment, inclusionStyle)
-    const result = await extendChainAtJunction(
-      adapter,
-      currentChain,
-      choice,
-      selectedWayId,
+    const result = await extendChainAtJunction(adapter, currentChain, choice, selectedWayId, {
       maxPerSide,
       candidateFilter,
-    )
+    })
     setChainResult(result.chain, result.pendingJunctions)
   }
 

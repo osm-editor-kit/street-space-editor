@@ -9,7 +9,7 @@ export type MapillaryUrlOptions = {
   panosOnly?: boolean
   /** Map zoom; defaults to 17. */
   zoom?: number
-  /** When set, adds `trafficSign=` (default `all` when omitted from options entirely uses `all`). */
+  /** `'all'` adds `trafficSign=all` (the default); `false` leaves the parameter out. */
   trafficSign?: 'all' | false
 }
 

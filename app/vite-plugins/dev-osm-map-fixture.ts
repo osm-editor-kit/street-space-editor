@@ -1,11 +1,11 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
-// Relative path so Vite's config bundler inlines the TS (package subpath is Node-externalized).
+// Relative path so Vite's config bundler inlines the TS.
 import {
   createDevOsmMapFixtureHandler,
   DEV_OSM_MAP_FIXTURE_ROUTE,
-} from '../../packages/osm-coverage/src/dev-osm-map-fixture/index'
+} from '../src/dev/osm-map-fixture/index'
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const fixturePath = path.join(appRoot, 'src/modes/parking/fixtures/dev-map-bbox.json')

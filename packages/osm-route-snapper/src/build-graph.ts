@@ -13,7 +13,7 @@ async function ensureOsmToRouteSnapperReady() {
   await initPromise
 }
 
-function coverageBoundaryGeoJson(data: ParsedOsmData) {
+function coverageBoundaryGeoJson(data: ParsedOsmData): string | null {
   let west = Infinity
   let south = Infinity
   let east = -Infinity
@@ -27,12 +27,8 @@ function coverageBoundaryGeoJson(data: ParsedOsmData) {
     north = Math.max(north, lat)
   }
 
-  if (!Number.isFinite(west)) {
-    west = 13.2
-    east = 13.6
-    south = 52.4
-    north = 52.6
-  }
+  // No node coordinates: there is nothing to route on.
+  if (!Number.isFinite(west)) return null
 
   const pad = 0.002
   west -= pad
@@ -63,8 +59,11 @@ export async function buildRouteSnapperGraphBytes(data: ParsedOsmData) {
   const wayCount = Object.keys(data.ways).length
   if (wayCount === 0) return null
 
+  const boundary = coverageBoundaryGeoJson(data)
+  if (!boundary) return null
+
   await ensureOsmToRouteSnapperReady()
   const xml = parsedOsmToXml(data)
   const input = new TextEncoder().encode(xml)
-  return convertOsmToRouteSnapper(input, coverageBoundaryGeoJson(data))
+  return convertOsmToRouteSnapper(input, boundary)
 }

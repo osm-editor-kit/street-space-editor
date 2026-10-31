@@ -2,9 +2,13 @@ import type { OsmTags } from '@osm-editor-kit/osm-data'
 import type { Segment } from './domain/types'
 
 /**
- * Atomic tag predicate. Compiles 1:1 to Overpass filter syntax and the same
- * semantics when matching in-memory `OsmTags` (missing tag matches `neq` / `nin`
- * / `absent`, same as Overpass).
+ * Atomic tag predicate. Compiles 1:1 to an Overpass tag filter and matches in-memory `OsmTags`
+ * the same way: a missing tag matches `neq`, `nin`, `nregex` and `absent`.
+ *
+ * `regex` / `nregex` patterns run as JavaScript `RegExp` in memory but go to Overpass unchanged,
+ * where they are POSIX extended regular expressions. Use only syntax both understand (anchors,
+ * groups, `|`, `[...]`, `*`, `+`, `?`, `{n,m}`); `\d`, `(?:...)`, lookarounds or lazy quantifiers
+ * will differ or fail in Overpass.
  */
 export type OsmTagPredicate =
   | { readonly key: string; readonly op: 'eq' | 'neq'; readonly value: string }
@@ -111,6 +115,17 @@ export function compileOverpassWaySelector(policy: OsmWaySelectionPolicy): strin
   return selectors[0]!
 }
 
+const regexCache = new Map<string, RegExp>()
+
+function cachedRegex(pattern: string): RegExp {
+  let regex = regexCache.get(pattern)
+  if (!regex) {
+    regex = new RegExp(pattern)
+    regexCache.set(pattern, regex)
+  }
+  return regex
+}
+
 function matchesTagPredicate(tags: OsmTags, predicate: OsmTagPredicate): boolean {
   const raw = tags[predicate.key]
   switch (predicate.op) {
@@ -123,9 +138,9 @@ function matchesTagPredicate(tags: OsmTags, predicate: OsmTagPredicate): boolean
     case 'nin':
       return raw == null || !predicate.values.includes(raw)
     case 'regex':
-      return raw != null && new RegExp(predicate.pattern).test(raw)
+      return raw != null && cachedRegex(predicate.pattern).test(raw)
     case 'nregex':
-      return raw == null || !new RegExp(predicate.pattern).test(raw)
+      return raw == null || !cachedRegex(predicate.pattern).test(raw)
     case 'present':
       return raw != null && raw !== ''
     case 'absent':
@@ -142,6 +157,7 @@ export function matchesOsmWaySelection(tags: OsmTags, policy: OsmWaySelectionPol
   return policy.include.some((clause) => matchesClause(tags, clausePredicates(policy, clause)))
 }
 
+/** {@link matchesOsmWaySelection} for a segment's tags, e.g. as a `candidateFilter`. */
 export function matchesOsmWaySelectionSegment(
   segment: Segment,
   policy: OsmWaySelectionPolicy,

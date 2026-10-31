@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'bun:test'
-import type { Segment } from '../domain/types'
 import {
   isReversedAtNode,
   normalizeTagsForDirection,
@@ -7,19 +6,7 @@ import {
   swapLeftRightKey,
 } from '../traversal/direction'
 import { mirrorTags } from '../traversal/mirror-tags'
-
-function makeSegment(id: number, nodeIds: number[], tags: Record<string, string> = {}): Segment {
-  return {
-    id,
-    version: 1,
-    nodeIds,
-    tags,
-    geometry: {
-      type: 'LineString',
-      coordinates: nodeIds.map((_, i) => [13.0 + i * 0.001, 52.0]),
-    },
-  }
-}
+import { makeSegment } from './helpers'
 
 describe('swapLeftRightKey', () => {
   it('swaps left and right in tag keys', () => {

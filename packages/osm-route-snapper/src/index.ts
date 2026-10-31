@@ -6,11 +6,7 @@ export {
   type RouteSnapperGraphData,
 } from './create-route-snapper-graph-api'
 export { parsedOsmToXml } from './parsed-osm-to-xml'
-export {
-  countRoutingNetworkEdges,
-  emptyLineCollection,
-  routingNetworkGeoJsonFromBytes,
-} from './routing-network-geojson'
+export { routingNetworkGeoJsonFromBytes } from './routing-network-geojson'
 export {
   countRoadWays,
   coverageGraphSignature,

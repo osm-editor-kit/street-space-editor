@@ -3,7 +3,7 @@ import { overpassDeUrl } from '@osm-editor-kit/osm-coverage'
 import type { LatLngLiteral, MapBounds, OsmNode, OsmWay } from '@osm-editor-kit/osm-data'
 import {
   idEditorUrl,
-  josmUrl,
+  josmImportUrl,
   mapillaryRecentPanosUrl,
   mapillaryUrl,
   osmchaChangesetUrl,
@@ -56,7 +56,9 @@ export function buildSelectedIdEditorUrl(ref: OsmFeatureRef) {
 
 export function buildSelectedJosmUrl(ref: OsmFeatureRef) {
   if (ref.type !== 'way') return null
-  return josmUrl + overpassDeUrl + compactOverpassQuery(getWayWithRelationsOverpassQuery(ref.id))
+  return josmImportUrl(
+    overpassDeUrl + compactOverpassQuery(getWayWithRelationsOverpassQuery(ref.id)),
+  )
 }
 
 export function buildViewportIdEditorUrl(viewport: MapViewportSnapshot) {
@@ -71,10 +73,8 @@ export function buildViewportJosmUrl(
   inclusionStyle: HighwayInclusionStyle,
 ) {
   if (viewport.bounds == null) return null
-  return (
-    josmUrl +
-    overpassDeUrl +
-    compactOverpassQuery(getHighwaysOverpassQuery(viewport.bounds, inclusionStyle))
+  return josmImportUrl(
+    overpassDeUrl + compactOverpassQuery(getHighwaysOverpassQuery(viewport.bounds, inclusionStyle)),
   )
 }
 

@@ -7,14 +7,10 @@ export {
   getCoverageSavedAt,
 } from './create-osm-coverage-api'
 export {
+  computeMissingFetchRequests,
   type CoverageFetchProps,
   type CoverageFetchKind,
   type MapSizePx,
-  boundsToPolygon,
-  bufferPxAtZoom,
-  computeMissingFetchRequests,
-  unionIntoCoverage,
 } from './coverage-geometry'
-export { OsmDataSource } from './osm-data-source'
 export { boundsToOverpassBbox, buildOverpassInterpreterUrl } from './overpass-url'
 export { overpassDeUrl, overpassVkUrl } from './overpass-urls'

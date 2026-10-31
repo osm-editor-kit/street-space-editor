@@ -1,29 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import type { Segment } from '../domain/types'
-import { isRoadLikeHighway } from '../highway-filter'
-import {
-  filterNeighborCandidates,
-  getEndpointNodeId,
-  pickBestNeighbor,
-  sameKind,
-} from '../traversal/neighborMatch'
-
-function makeSegment(
-  id: number,
-  nodeIds: number[],
-  tags: Record<string, string> = { highway: 'primary' },
-): Segment {
-  return {
-    id,
-    version: 1,
-    nodeIds,
-    tags,
-    geometry: {
-      type: 'LineString',
-      coordinates: nodeIds.map((_, i) => [13.0 + i * 0.001, 52.0]),
-    },
-  }
-}
+import { filterNeighborCandidates, pickBestNeighbor, sameKind } from '../traversal/neighborMatch'
+import { makeSegment } from './helpers'
 
 describe('sameKind', () => {
   it('matches segments with same highway tag', () => {
@@ -58,10 +35,13 @@ describe('filterNeighborCandidates', () => {
 
   it('applies candidate filter when provided', () => {
     const from = makeSegment(1, [10, 20], { highway: 'primary' })
-    const road = makeSegment(2, [20, 30], { highway: 'primary' })
+    const road = makeSegment(2, [20, 30], { highway: 'secondary' })
     const footway = makeSegment(3, [20, 40], { highway: 'footway' })
-    const result = filterNeighborCandidates(from, [road, footway], 'forward', (segment) =>
-      isRoadLikeHighway(segment.tags),
+    const result = filterNeighborCandidates(
+      from,
+      [road, footway],
+      'forward',
+      (segment) => segment.tags.highway !== 'footway',
     )
     expect(result.map((s) => s.id)).toEqual([2])
   })
@@ -80,27 +60,11 @@ describe('pickBestNeighbor', () => {
     const b = makeSegment(3, [20, 40], { highway: 'cycleway' })
     expect(pickBestNeighbor(from, [a, b])).toBeUndefined()
   })
-})
 
-describe('getEndpointNodeId', () => {
-  it('returns last node for forward', () => {
-    expect(getEndpointNodeId(makeSegment(1, [10, 20, 30]), 'forward')).toBe(30)
-  })
-
-  it('returns first node for backward', () => {
-    expect(getEndpointNodeId(makeSegment(1, [10, 20, 30]), 'backward')).toBe(10)
-  })
-})
-
-describe('isRoadLikeHighway', () => {
-  it('accepts core road classes and links', () => {
-    expect(isRoadLikeHighway({ highway: 'residential' })).toBe(true)
-    expect(isRoadLikeHighway({ highway: 'primary_link' })).toBe(true)
-    expect(isRoadLikeHighway({ highway: 'busway' })).toBe(true)
-  })
-
-  it('rejects non-road highways', () => {
-    expect(isRoadLikeHighway({ highway: 'footway' })).toBe(false)
-    expect(isRoadLikeHighway({ highway: 'cycleway' })).toBe(false)
+  it('prefers the candidate with the same name', () => {
+    const from = makeSegment(1, [10, 20], { highway: 'residential', name: 'Main' })
+    const a = makeSegment(2, [20, 30], { highway: 'residential', name: 'Side' })
+    const b = makeSegment(3, [20, 40], { highway: 'residential', name: 'Main' })
+    expect(pickBestNeighbor(from, [a, b])?.id).toBe(3)
   })
 })

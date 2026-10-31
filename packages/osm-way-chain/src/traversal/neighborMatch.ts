@@ -1,44 +1,34 @@
 import type { NeighborDirection, Segment } from '../domain/types'
+import { getEndpointNodeId } from './endpoints'
 
-/** Primary highway-like key used for same-kind matching */
+/** Primary keys used for same-kind matching, in priority order */
 const KIND_KEYS = ['highway', 'cycleway', 'footway', 'path', 'railway', 'waterway'] as const
 
+/** Restricts which ways may join a chain. */
 export type CandidateFilter = (segment: Segment) => boolean
 
-export function getKindKey(tags: Segment['tags']) {
+export function getKindKey(tags: Segment['tags']): { key: string; value: string } | undefined {
   for (const key of KIND_KEYS) {
-    if (tags[key]) return { key, value: tags[key] }
+    const value = tags[key]
+    if (value) return { key, value }
   }
   return undefined
 }
 
-export function sameKind(a: Segment, b: Segment) {
+export function sameKind(a: Segment, b: Segment): boolean {
   const kindA = getKindKey(a.tags)
   const kindB = getKindKey(b.tags)
   if (!kindA || !kindB) return false
   return kindA.key === kindB.key && kindA.value === kindB.value
 }
 
-export function getEndpointNodeId(segment: Segment, direction: NeighborDirection) {
-  const { nodeIds } = segment
-  return direction === 'forward' ? nodeIds[nodeIds.length - 1]! : nodeIds[0]!
-}
-
-export function getOtherEndpointNodeId(segment: Segment, sharedNodeId: number) {
-  const first = segment.nodeIds[0]
-  const last = segment.nodeIds[segment.nodeIds.length - 1]
-  if (first === sharedNodeId) return last!
-  if (last === sharedNodeId) return first!
-  return undefined
-}
-
-/** Filter candidates at a junction: exclude self, prefer same kind */
+/** Ways that start or end at `from`'s endpoint in `direction`; same-kind ways win if there are any. */
 export function filterNeighborCandidates(
   from: Segment,
   candidates: Segment[],
   direction: NeighborDirection,
   candidateFilter?: CandidateFilter,
-) {
+): Segment[] {
   const endpoint = getEndpointNodeId(from, direction)
   const touching = candidates.filter((c) => {
     if (c.id === from.id) return false
@@ -53,8 +43,8 @@ export function filterNeighborCandidates(
   return touching
 }
 
-/** Score candidate for auto-follow (higher = better) */
-export function scoreNeighborCandidate(from: Segment, candidate: Segment) {
+/** Score for auto-follow (higher = better) */
+export function scoreNeighborCandidate(from: Segment, candidate: Segment): number {
   let score = 0
   if (sameKind(from, candidate)) score += 100
   if (candidate.tags.name && candidate.tags.name === from.tags.name) score += 50
@@ -62,7 +52,8 @@ export function scoreNeighborCandidate(from: Segment, candidate: Segment) {
   return score
 }
 
-export function pickBestNeighbor(from: Segment, candidates: Segment[]) {
+/** The neighbor to follow, or `undefined` when there is none or the top two tie below same kind. */
+export function pickBestNeighbor(from: Segment, candidates: Segment[]): Segment | undefined {
   if (candidates.length === 0) return undefined
   if (candidates.length === 1) return candidates[0]
 

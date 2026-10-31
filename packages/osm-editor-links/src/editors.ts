@@ -1,10 +1,7 @@
-import type { LatLngLiteral } from '@osm-editor-kit/osm-data'
-import { type OsmNode, type OsmRelation, type OsmWay } from '@osm-editor-kit/osm-data'
-import { josmRemoteBase, josmUrl } from './hosts'
+import type { LatLngLiteral, OsmNode, OsmRelation, OsmWay } from '@osm-editor-kit/osm-data'
+import { josmRemoteBase } from './hosts'
 import type { OsmObjectType } from './osm-type'
 import { toShortOsmType } from './osm-type'
-
-export { josmUrl }
 
 type IdEditorUrlProps = {
   center?: LatLngLiteral
@@ -63,39 +60,14 @@ export function osmEditIdUrl({
   return hash ? `${url.toString()}#${hash}` : url.toString()
 }
 
-export function osmEditRapidUrl(options: {
-  osmType: OsmObjectType | null | undefined
-  osmId: number | string | null | undefined
-  hashtags?: string
-  locale?: string
-}): string | undefined {
-  const { osmType, osmId, hashtags = 'TILDA', locale = 'de' } = options
-  if (!osmType || osmId == null || osmId === '') return undefined
-  const short = toShortOsmType(osmType)
-  if (!short) return undefined
-  return `https://rapideditor.org/edit#id=${short}${osmId}&disable_features=boundaries&locale=${locale}&hashtags=${hashtags}`
-}
-
-export function osmEditKyleKiwiIdUrl(options: {
-  osmType: OsmObjectType | null | undefined
-  osmId: number | string | null | undefined
-  hashtags?: string
-  locale?: string
-}): string | undefined {
-  const { osmType, osmId, hashtags = 'TILDA', locale = 'en' } = options
-  if (!osmType || osmId == null || osmId === '') return undefined
-  const short = toShortOsmType(osmType)
-  if (!short) return undefined
-  return `https://kyle.kiwi/iD/#id=${short}${osmId}&locale=${locale}&disable_features=boundaries&hashtags=${hashtags}`
-}
-
 /** JOSM remote control `load_object` for a single OSM element. */
 export function josmLoadObjectUrl(options: {
   osmType: OsmObjectType | null | undefined
   osmId: number | string | null | undefined
+  /** Pre-fills the changeset hashtags in JOSM. Left out when empty. */
   changesetHashtags?: string
 }): string | undefined {
-  const { osmType, osmId, changesetHashtags = 'TILDA' } = options
+  const { osmType, osmId, changesetHashtags } = options
   if (!osmType || osmId == null || osmId === '') return undefined
   const short = toShortOsmType(osmType)
   if (!short) return undefined
@@ -105,7 +77,12 @@ export function josmLoadObjectUrl(options: {
   return url.toString()
 }
 
-/** Prefix for JOSM `import?url=` (Overpass / map download). Same as `josmUrl`. */
-export function josmImportUrl(): string {
-  return josmUrl
+/**
+ * JOSM remote control `import?url=`: loads the data at `url` (an Overpass query, a map download
+ * or a changeset download). The url is appended as is: JOSM reads everything after `url=` as the
+ * URL, including `&`, so it must stay the last parameter and needs no percent-encoding.
+ * @see https://josm.openstreetmap.de/wiki/Help/RemoteControlCommands#import
+ */
+export function josmImportUrl(url: string): string {
+  return `${josmRemoteBase}/import?url=${url}`
 }

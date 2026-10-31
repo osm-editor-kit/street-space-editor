@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
-import { boundsToPolygon } from '@osm-editor-kit/osm-coverage'
 import type { OsmWay } from '@osm-editor-kit/osm-data'
 import { emptyParsedOsmData } from '@osm-editor-kit/osm-data'
+import { polygon } from '@turf/helpers'
 import type { MapBounds } from '../modes/parking/map/types'
 import { DEFAULT_HIGHWAY_INCLUSION_STYLE } from '../shell/map/street-space-way-policy'
 
@@ -94,7 +94,15 @@ describe('ensureParkingOsmCoverage', () => {
     const key = parkingOsmSessionKey(sessionParams)
     queryClient.setQueryData(key, {
       graph: emptyParkingOsmData().graph,
-      coverage: boundsToPolygon(viewport),
+      coverage: polygon([
+        [
+          [viewport.west, viewport.south],
+          [viewport.east, viewport.south],
+          [viewport.east, viewport.north],
+          [viewport.west, viewport.north],
+          [viewport.west, viewport.south],
+        ],
+      ]),
       fetchHistory: { type: 'FeatureCollection', features: [] },
     })
 

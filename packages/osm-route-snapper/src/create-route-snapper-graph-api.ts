@@ -81,7 +81,6 @@ export function createRouteSnapperGraphApi({
             }
           } catch (error: unknown) {
             const message = error instanceof Error ? error.message : 'Graph build failed'
-            console.error('route-snapper graph build failed', error)
             return {
               graphBytes: null,
               wayCount,

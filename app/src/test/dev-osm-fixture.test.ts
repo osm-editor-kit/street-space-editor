@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { devOsmMapFixtureMapUrl } from '@osm-editor-kit/osm-coverage/dev-osm-map-fixture'
+import { devOsmMapFixtureMapUrl } from '../dev/osm-map-fixture/dev-osm-map-fixture-url'
 import {
   DEV_OSM_FIXTURE_TEST_STREET_WAY_ID,
   sanitizeDevOsmFixtureTestStreet,

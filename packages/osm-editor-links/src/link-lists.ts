@@ -15,7 +15,7 @@ import {
   tildaViewerBase,
 } from './hosts'
 import { osmChangesetUrl, osmObjectHistoryUrl, osmOrgUrl } from './osm-object'
-import { type OsmObjectType, shortOsmType } from './osm-type'
+import { type OsmObjectType, toShortOsmType } from './osm-type'
 import { osmchaChangesetUrl, osmchaFiltersUrl } from './osmcha'
 
 /** One link of a list. `id` is stable: apps use it for their own translated label. */
@@ -90,11 +90,9 @@ export function elementLinks({ type, id, loc, zoom = 17, server }: ElementLinksO
       link(
         'rapid',
         'Rapid',
-        id === '' ? undefined : `${rapidBase}/edit#id=${shortOsmType[type]}${id}`,
+        id === '' ? undefined : `${rapidBase}/edit#id=${toShortOsmType(type)}${id}`,
       ),
-      link('josm', 'JOSM', josmLoadObjectUrl({ osmType: type, osmId: id, changesetHashtags: '' }), {
-        josm: true,
-      }),
+      link('josm', 'JOSM', josmLoadObjectUrl(object), { josm: true }),
       link('level0', 'Level0', id === '' ? undefined : `${level0Base}/?url=${type}/${id}`),
     )
     if (loc) {
@@ -128,7 +126,7 @@ export function changesetLinks({ id, server }: ChangesetLinksOptions): OsmLink[]
       link('achavi', 'achavi', `${achaviBase}/?changeset=${id}&relations=true`),
       link('resultmaps', 'ResultMaps', `${resultMapsBase}/osm-change-viz?c=${id}`),
       link('osm-revert', 'osm-revert', `${osmRevertBase}/?changesets=${id}`),
-      link('josm', 'JOSM', `${josmImportUrl()}${osmProdUrl}/api/0.6/changeset/${id}/download`, {
+      link('josm', 'JOSM', josmImportUrl(`${osmProdUrl}/api/0.6/changeset/${id}/download`), {
         josm: true,
       }),
       link('level0', 'Level0', `${level0Base}/?url=changeset/${id}`),

@@ -1,7 +1,5 @@
-/** JOSM remote-control base for `import?url=` (Overpass / map download). */
+/** JOSM remote-control base. */
 export const josmRemoteBase = 'http://127.0.0.1:8111'
-/** @deprecated Prefer `josmImportUrl` / `josmLoadObjectUrl`; kept for existing callers. */
-export const josmUrl = `${josmRemoteBase}/import?url=`
 
 export const osmProdUrl = 'https://www.openstreetmap.org'
 /** Production OSM API host (OAuth, map downloads, changeset upload). */
@@ -15,7 +13,7 @@ export const osmDeepHistoryBase = 'https://osmlab.github.io/osm-deep-history'
 /** Third-party viewers and editors, used by the link lists. */
 export const pewuHistoryBase = 'https://pewu.github.io/osm-history'
 export const rapidBase = 'https://rapideditor.org'
-export const level0Base = 'http://level0.osmz.ru'
+export const level0Base = 'https://level0.osmz.ru'
 export const mapillaryBase = 'https://www.mapillary.com'
 export const panoramaxBase = 'https://api.panoramax.xyz'
 export const tildaViewerBase = 'https://viewer.tilda-geo.de'

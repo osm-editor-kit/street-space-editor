@@ -1,7 +1,17 @@
 # `@osm-editor-kit/osm-maplibre`
 
+MapLibre helpers for OSM editors: an OpenFreeMap Positron basemap style, an anchor layer for your overlays, and line paint in real-world metres.
+
 > [!NOTE]
-> This package is an **alpha** release and still under active development. APIs may change; install with the npm `alpha` dist-tag.
+> Claude Opus 5.5 wrote and reviewed the code of this package. [@tordans](https://github.com/tordans) specified what it should do and tested and verified its user-facing behavior.
+
+## Install
+
+```bash
+npm install @osm-editor-kit/osm-maplibre
+```
+
+Also install the peer dependency `maplibre-gl` (the package uses its `StyleSpecification` and `ExpressionSpecification` types).
 
 ## What it does
 
@@ -9,11 +19,11 @@
 - Anchor layer id so your overlays stack above the basemap
 - Line width and offset from real-world metres (zoom-aware paint expressions)
 - Focus styling helpers (highlight matching features, mute the rest)
-- Utilities to patch or rebuild OpenFreeMap styles at runtime
+- `buildOpenFreeMapPositronStyle` to rebuild the Positron style from an upstream style JSON
 
 ## Usage
 
-```ts
+```tsx
 import {
   OPENFREEMAP_POSITRON_STYLE,
   OPENFREEMAP_POSITRON_IMAGERY_USED,
@@ -24,7 +34,6 @@ import {
   focusCaseOpacity,
   metersPerPixel,
   buildOpenFreeMapPositronStyle,
-  patchOpenFreeMapStyle,
 } from '@osm-editor-kit/osm-maplibre'
 
 // Default basemap for <Map mapStyle={…} />
@@ -44,11 +53,16 @@ const style = OPENFREEMAP_POSITRON_STYLE
 'line-color': focusCaseColor(['==', ['get', 'infra'], 'car'], '#2563eb')
 'line-opacity': focusCaseOpacity(['==', ['get', 'infra'], 'car'], 0.55)
 
-metersPerPixel(16, 51) // ground metres per screen pixel at zoom/lat
+metersPerPixel(16, 51) // ground metres per screen pixel at zoom/latitude
 
-// Patch a custom OpenFreeMap style JSON at runtime
-buildOpenFreeMapPositronStyle(upstreamStyle)
-patchOpenFreeMapStyle(upstreamStyle) // filters only
+// Rebuild the style from an upstream OpenFreeMap style JSON
+buildOpenFreeMapPositronStyle(upstreamStyle) // null-safe filters + anchor layer
 ```
 
-`maplibre-gl` is a dependency (`StyleSpecification` types). `OPENFREEMAP_POSITRON_IMAGERY_USED` is the iD-style `imagery_used` label when no ELI overlay is active.
+`OPENFREEMAP_POSITRON_IMAGERY_USED` is the iD-style `imagery_used` label for the default basemap when no ELI overlay is active.
+
+The metre-based paint uses a fixed pixel scale for latitude 51° (Germany). Widths drift at other latitudes.
+
+## License
+
+MIT

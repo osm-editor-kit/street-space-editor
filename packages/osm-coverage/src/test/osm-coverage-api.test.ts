@@ -3,7 +3,6 @@ import { emptyParsedOsmData, type MapBounds } from '@osm-editor-kit/osm-data'
 import { QueryClient } from '@tanstack/react-query'
 import { boundsToPolygon } from '../coverage-geometry'
 import { createOsmCoverageApi } from '../create-osm-coverage-api'
-import { OsmDataSource } from '../osm-data-source'
 
 const viewport: MapBounds = {
   south: 52.47,
@@ -16,7 +15,7 @@ const mapSizePx = { width: 1000, height: 800 }
 
 type TestSessionParams = {
   editorMode: boolean
-  osmDataSource: OsmDataSource
+  osmDataSource: string
 }
 
 const testApi = createOsmCoverageApi<TestSessionParams>({
@@ -30,7 +29,7 @@ const testApi = createOsmCoverageApi<TestSessionParams>({
 describe('ensureCoverage', () => {
   test('skips network when viewport is covered', async () => {
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
     const key = testApi.sessionKey(params)
     queryClient.setQueryData(key, {
       graph: emptyParsedOsmData(),
@@ -51,7 +50,7 @@ describe('ensureCoverage', () => {
 
   test('skips fetch when zoom is below minZoom', async () => {
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
 
     const result = await testApi.ensureCoverage(queryClient, {
       bounds: viewport,
@@ -65,7 +64,7 @@ describe('ensureCoverage', () => {
 
   test('records fetch history after a fetch', async () => {
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
     const key = testApi.sessionKey(params)
 
     await testApi.ensureCoverage(queryClient, {
@@ -96,7 +95,7 @@ describe('ensureCoverage', () => {
     })
 
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
 
     const result = await api.ensureCoverage(queryClient, {
       bounds: viewport,
@@ -129,7 +128,7 @@ describe('ensureCoverage', () => {
     })
 
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
     const otherViewport: MapBounds = {
       south: 52.5,
       west: 13.5,
@@ -191,7 +190,7 @@ describe('ensureCoverage', () => {
     })
 
     const queryClient = new QueryClient()
-    const params = { editorMode: false, osmDataSource: OsmDataSource.OverpassVk }
+    const params = { editorMode: false, osmDataSource: 'overpass-vk' }
     const key = api.sessionKey(params)
     queryClient.setQueryData(key, {
       graph: {

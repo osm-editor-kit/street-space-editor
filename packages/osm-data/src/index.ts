@@ -6,7 +6,9 @@ export type {
   OsmObject,
   OsmRelation,
   OsmTags,
+  OsmType,
   OsmWay,
   RawOsmData,
+  RelationMember,
 } from './types/osm-data'
 export type { ParsedOsmData, WaysInRelation } from './types/osm-data-storage'

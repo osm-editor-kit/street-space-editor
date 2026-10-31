@@ -16,8 +16,7 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts",
-    "./dev-osm-map-fixture": "./src/dev-osm-map-fixture/index.ts"
+    ".": "./src/index.ts"
   },
   "publishConfig": {
     "access": "public",
@@ -34,7 +33,6 @@
   },
   "dependencies": {
     "@osm-editor-kit/osm-data": "workspace:*",
-    "@tanstack/react-query": "^5.85.5",
     "@turf/area": "^7.3.5",
     "@turf/bbox": "^7.3.5",
     "@turf/bbox-polygon": "^7.3.5",
@@ -42,10 +40,11 @@
     "@turf/flatten": "^7.3.5",
     "@turf/helpers": "^7.3.5",
     "@turf/intersect": "^7.3.5",
-    "@turf/union": "^7.3.5"
+    "@turf/union": "^7.3.5",
+    "@types/geojson": "^7946.0.16"
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.16",
+    "@tanstack/react-query": "^5.85.5",
     "@types/react": "^19.1.10",
     "bun-types": "^1.2.20",
     "react": "^19.1.1",
@@ -53,6 +52,7 @@
     "typescript": "^7.0.0"
   },
   "peerDependencies": {
+    "@tanstack/react-query": "^5",
     "react": "^19.0.0"
   },
   "publishExports": {
