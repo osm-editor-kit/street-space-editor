@@ -1,6 +1,6 @@
 {
   "name": "@osm-editor-kit/osm-route-snapper",
-  "version": "0.1.0-alpha.3",
+  "version": "1.0.0",
   "description": "Build route-snapper graph bytes and routing-network GeoJSON from parsed OSM coverage (WASM).",
   "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-route-snapper",
   "license": "MIT",

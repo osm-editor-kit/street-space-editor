@@ -112,7 +112,7 @@
     },
     "packages/osm-coverage": {
       "name": "@osm-editor-kit/osm-coverage",
-      "version": "0.1.0-alpha.4",
+      "version": "1.0.0",
       "dependencies": {
         "@osm-editor-kit/osm-data": "workspace:*",
         "@turf/area": "^7.3.5",
@@ -140,7 +140,7 @@
     },
     "packages/osm-data": {
       "name": "@osm-editor-kit/osm-data",
-      "version": "0.1.0-alpha.1",
+      "version": "1.0.0",
       "dependencies": {
         "axios": "^1.11.0",
       },
@@ -152,7 +152,7 @@
     },
     "packages/osm-editor-links": {
       "name": "@osm-editor-kit/osm-editor-links",
-      "version": "0.1.0-alpha.2",
+      "version": "1.0.0",
       "dependencies": {
         "@osm-editor-kit/osm-data": "workspace:*",
       },
@@ -187,7 +187,7 @@
     },
     "packages/osm-map-url": {
       "name": "@osm-editor-kit/osm-map-url",
-      "version": "0.1.0-alpha.1",
+      "version": "1.0.0",
       "dependencies": {
         "zod": "^4.0.17",
       },
@@ -203,7 +203,7 @@
     },
     "packages/osm-maplibre": {
       "name": "@osm-editor-kit/osm-maplibre",
-      "version": "0.1.0-alpha.2",
+      "version": "1.0.0",
       "devDependencies": {
         "bun-types": "^1.2.20",
         "maplibre-gl": "^6.7.0",
@@ -229,7 +229,7 @@
     },
     "packages/osm-route-snapper": {
       "name": "@osm-editor-kit/osm-route-snapper",
-      "version": "0.1.0-alpha.3",
+      "version": "1.0.0",
       "dependencies": {
         "@osm-editor-kit/osm-data": "workspace:*",
         "@types/geojson": "^7946.0.16",
@@ -287,7 +287,7 @@
     },
     "packages/osm-way-chain": {
       "name": "@osm-editor-kit/osm-way-chain",
-      "version": "0.1.0-alpha.4",
+      "version": "1.0.0",
       "dependencies": {
         "@osm-editor-kit/osm-data": "workspace:*",
         "@types/geojson": "^7946.0.16",

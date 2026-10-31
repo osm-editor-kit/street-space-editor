@@ -1,6 +1,6 @@
 {
   "name": "@osm-editor-kit/osm-editor-links",
-  "version": "0.1.0-alpha.2",
+  "version": "1.0.0",
   "description": "OpenStreetMap link lists for elements, changesets and users (editors, history, viewers, imagery), with JOSM remote-control helpers.",
   "keywords": [
     "id-editor",

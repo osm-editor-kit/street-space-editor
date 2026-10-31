@@ -1,6 +1,6 @@
 {
   "name": "@osm-editor-kit/osm-map-url",
-  "version": "0.1.0-alpha.1",
+  "version": "1.0.0",
   "description": "Parse and serialize compact map and OSM feature URL search params for TanStack Router apps.",
   "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-map-url",
   "license": "MIT",

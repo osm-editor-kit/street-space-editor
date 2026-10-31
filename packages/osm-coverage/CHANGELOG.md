@@ -1,5 +1,24 @@
 # @osm-editor-kit/osm-coverage
 
+## 1.0.0
+
+### Major Changes
+
+- First stable release. Stable API for incremental viewport downloads: `createOsmCoverageApi` fetches only the parts of the map you have not covered yet, keeps graph, coverage and fetch history in TanStack Query, can persist sessions through a storage adapter, and ships Overpass URL helpers.
+
+  Changes since the last alpha:
+
+  - `@tanstack/react-query` is now a peer dependency, install it yourself (`^5`).
+  - Removed from the public API: `boundsToPolygon`, `bufferPxAtZoom`, `unionIntoCoverage`, `OsmDataSource`, and the `./dev-osm-map-fixture` subpath.
+  - A failed save is silent unless you pass the new `onPersistError` option; it used to log to the console.
+
+### Patch Changes
+
+- c31ec5d: - The repository and homepage links point to the new home, [osm-editor-kit/street-space-editor](https://github.com/osm-editor-kit/street-space-editor).
+- Updated dependencies [c31ec5d]
+- Updated dependencies
+  - @osm-editor-kit/osm-data@1.0.0
+
 ## 0.1.0-alpha.4
 
 ### Patch Changes

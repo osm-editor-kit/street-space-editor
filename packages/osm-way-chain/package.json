@@ -1,6 +1,6 @@
 {
   "name": "@osm-editor-kit/osm-way-chain",
-  "version": "0.1.0-alpha.4",
+  "version": "1.0.0",
   "description": "Traverse and orient connected OSM highway ways for multi-segment editing sessions.",
   "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-way-chain",
   "license": "MIT",

@@ -1,5 +1,21 @@
 # @osm-editor-kit/osm-maplibre
 
+## 1.0.0
+
+### Major Changes
+
+- First stable release. Stable OpenFreeMap Positron basemap style for MapLibre with an overlay anchor layer, plus metre-based line width and offset paint helpers and focus (highlight and mute) paint helpers.
+
+  Changes since the last alpha:
+
+  - `maplibre-gl` is now a peer dependency, install it yourself (`^6`).
+  - `lineWidthFromMeters`, `lineOffsetFromMeters`, `focusCaseColor` and `focusCaseOpacity` return `ExpressionSpecification` instead of `unknown`.
+  - Removed from the public API: `patchOpenFreeMapStyle`, `appendCustomContentAnchor`, `MAP_CUSTOM_CONTENT_ANCHOR_SOURCE_ID`, `EARTH_CIRCUMFERENCE`, `TILE_SIZE`, `GERMANY_LAT`, `PIXEL_SCALE_GERMANY`, `pixelScaleFactorAtLat`, `pixelsFromMeters`, `MAP_FOCUS_MUTED_COLOR`, `MAP_FOCUS_MUTED_OPACITY`.
+
+### Patch Changes
+
+- c31ec5d: - The repository and homepage links point to the new home, [osm-editor-kit/street-space-editor](https://github.com/osm-editor-kit/street-space-editor).
+
 ## 0.1.0-alpha.2
 
 ### Patch Changes

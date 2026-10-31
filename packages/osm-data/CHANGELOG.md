@@ -1,5 +1,19 @@
 # @osm-editor-kit/osm-data
 
+## 1.0.0
+
+### Major Changes
+
+- First stable release. Stable API to download OSM JSON from Overpass or the OSM API, parse it into indexed ways, relations, tagged nodes, node coordinates and way-in-relation lookups, and merge several downloads with version-aware updates for ways and relations.
+
+  Changes since the last alpha:
+
+  - The types `RelationMember` and `OsmType` are now exported.
+
+### Patch Changes
+
+- c31ec5d: - The repository and homepage links point to the new home, [osm-editor-kit/street-space-editor](https://github.com/osm-editor-kit/street-space-editor).
+
 ## 0.1.0-alpha.1
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @osm-editor-kit/osm-route-snapper
 
+## 1.0.0
+
+### Major Changes
+
+- First stable release. Stable API to build a route-snapper graph from loaded OSM data, read its routing network as GeoJSON, and rebuild it automatically in React with TanStack Query.
+
+  Changes since the last alpha:
+
+  - `buildRouteSnapperGraphBytes` returns `null` without node coordinates, instead of falling back to a Berlin bounding box.
+  - Removed from the public API: `countRoutingNetworkEdges`, `emptyLineCollection`.
+
+### Patch Changes
+
+- c31ec5d: - The repository and homepage links point to the new home, [osm-editor-kit/street-space-editor](https://github.com/osm-editor-kit/street-space-editor).
+- Updated dependencies [c31ec5d]
+- Updated dependencies
+  - @osm-editor-kit/osm-data@1.0.0
+
 ## 0.1.0-alpha.3
 
 ### Patch Changes
