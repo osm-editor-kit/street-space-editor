@@ -1,9 +1,12 @@
 {
   "name": "street-space-editor",
   "private": true,
-  "description": "Street Space Editor for OpenStreetMap — Bun workspace monorepo",
+  "description": "Street Space Editor for OpenStreetMap \u2014 Bun workspace monorepo",
   "type": "module",
-  "workspaces": ["app", "packages/*"],
+  "workspaces": [
+    "app",
+    "packages/*"
+  ],
   "scripts": {
     "predev": "bun run --filter @osm-editor-kit/street-space-editor predev",
     "dev": "bun run --filter @osm-editor-kit/street-space-editor dev",
@@ -23,14 +26,12 @@
     "check-pre-push": "bun run ensure-paraglide && bun run --parallel type-check:all lint format test-run:all",
     "build:packages": "bun run --filter '@osm-editor-kit/osm-data' --filter '@osm-editor-kit/osm-way-chain' --filter '@osm-editor-kit/osm-coverage' --filter '@osm-editor-kit/osm-editor-links' --filter '@osm-editor-kit/osm-map-url' --filter '@osm-editor-kit/osm-maplibre' --filter '@osm-editor-kit/osm-route-snapper' build",
     "lanes:census": "bun run scripts/lanes-census.ts",
-    "packages:changeset": "bun run scripts/packages-changeset.ts",
-    "packages:check": "bun run scripts/packages-release.ts -- --check",
-    "packages:release": "bun run scripts/packages-release.ts",
     "version-packages": "changeset version",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "bun run scripts/release.ts"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.1",
+    "@changesets/cli": "^3.0.3",
     "@clack/prompts": "^1.7.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "9.1.7",
@@ -39,5 +40,6 @@
     "oxlint-config-react-hooks-js": "^1.1.4",
     "picocolors": "^1.1.1",
     "tsup": "^8.5.1"
-  }
+  },
+  "packageManager": "bun@1.4.4"
 }

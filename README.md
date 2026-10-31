@@ -3,6 +3,9 @@
 - [Open the editor](https://osm-editor-kit.github.io/street-space-editor/?zoom=16&lat=52.4751&lng=13.4435)
 - Learn more about the project [in the launch post](https://www.openstreetmap.org/user/acsd/diary/45026).
 
+> [!NOTE]
+> Claude Opus 5.5 wrote and reviewed the code of this project. [@tordans](https://github.com/tordans) specified what it should do and tested and verified its user-facing behavior.
+
 One app with a shared OSM shell (auth, fetch, changeset upload) and **modes** for visualization and editing:
 
 | Mode | Status |
@@ -66,6 +69,14 @@ Flat audit pages (no mode chrome) for reviewing interpretation rules and fixture
 
 - https://osm-editor-kit.github.io/street-space-editor/audit-width
 - https://osm-editor-kit.github.io/street-space-editor/audit-lanes/one-lane-each-way
+
+## Release
+
+Versions and changelogs use [changesets](https://github.com/changesets/changesets), see [`.changeset/README.md`](.changeset/README.md). Releases run from a terminal with npm 2FA:
+
+```bash
+bun run release
+```
 
 ## Install git hook
 
