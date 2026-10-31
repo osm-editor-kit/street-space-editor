@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Tailwind does not scan node_modules. */
+@source '../../node_modules/@osm-editor-kit/street-imagery-react';
+
 @theme {
   --font-sans: Inter, sans-serif;
   --font-sans--font-feature-settings: 'cv11';

@@ -13,10 +13,8 @@ Wave packages are stable (1.0.0 and up) and follow semver: `patch` for fixes, `m
 - `@osm-editor-kit/osm-maplibre`
 - `@osm-editor-kit/osm-route-snapper`
 - `@osm-editor-kit/osm-way-chain`
-- `@osm-editor-kit/street-imagery`
-- `@osm-editor-kit/street-imagery-react`
 
-Other kit packages stay private. Draft notes: [`docs/changeset-pending-private/`](../docs/changeset-pending-private/). The app is `private` and ignored.
+The street imagery packages moved to [osm-editor-kit/street-imagery](https://github.com/osm-editor-kit/street-imagery). Other kit packages stay private. Draft notes: [`docs/changeset-pending-private/`](../docs/changeset-pending-private/). The app is `private` and ignored.
 
 ## Flow
 
@@ -84,5 +82,5 @@ bun run packages:changeset -- <name>
 ## Install in other apps
 
 ```bash
-bun add @osm-editor-kit/street-imagery
+bun add @osm-editor-kit/osm-data
 ```

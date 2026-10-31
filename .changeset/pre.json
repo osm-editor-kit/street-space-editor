@@ -18,41 +18,11 @@
     "@osm-editor-kit/osm-tag-syntax": "0.0.0",
     "@osm-editor-kit/osm-ui": "0.0.0",
     "@osm-editor-kit/osm-way-chain": "0.0.0",
-    "@osm-editor-kit/osm-way-edit": "0.0.0",
-    "@osm-editor-kit/street-imagery": "0.0.0",
-    "@osm-editor-kit/street-imagery-react": "0.0.0"
+    "@osm-editor-kit/osm-way-edit": "0.0.0"
   },
   "changesets": [
-    "date-slider-scale",
     "gentle-tidy-anchors",
-    "imagery-bbox-helper-reuse",
-    "imagery-compiled-stable-viewport",
-    "imagery-dense-areas-smooth",
-    "imagery-floating-viewer-default-position",
-    "imagery-layers-before-id",
-    "imagery-low-zoom-lines",
-    "imagery-mapillary-cone-direction",
-    "imagery-off-provider-stale-data",
-    "imagery-panoramax-no-widgets",
-    "imagery-photo-cache-limit",
-    "imagery-photo-click-target",
-    "imagery-photo-count-format",
-    "imagery-photo-type-test-once",
-    "imagery-viewer-panels-entry",
     "installable-kit-packages",
-    "kartaview-small-tiles",
-    "locale-en-de",
-    "location-openers",
-    "mapillary-features-look-at",
-    "opener-links-account-date",
-    "panoramax-in-mapillary-viewer",
-    "photo-date-range-filter",
-    "providers-per-entry",
-    "registry-metadata-fix",
-    "selected-map-feature",
-    "sign-groups-age-steps",
-    "street-views-buttons",
-    "streetview-outdoor",
-    "viewpoint-photo-finder"
+    "registry-metadata-fix"
   ]
 }
