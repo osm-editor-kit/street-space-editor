@@ -2,12 +2,12 @@
   "name": "@osm-editor-kit/osm-maplibre",
   "version": "0.1.0-alpha.2",
   "description": "MapLibre helpers for OSM editors: OpenFreeMap Positron style, overlay anchors, and metre-based paint.",
-  "homepage": "https://github.com/osmberlin/street-space-editor/tree/main/packages/osm-maplibre",
+  "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-maplibre",
   "license": "MIT",
   "author": "Tobias Jordans",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osmberlin/street-space-editor.git",
+    "url": "git+https://github.com/osm-editor-kit/street-space-editor.git",
     "directory": "packages/osm-maplibre"
   },
   "files": [
@@ -19,8 +19,7 @@
     ".": "./src/index.ts"
   },
   "publishConfig": {
-    "access": "public",
-    "tag": "alpha"
+    "access": "public"
   },
   "scripts": {
     "build": "tsup && rm -f .tsbuildinfo && tsc -p tsconfig.build.json",

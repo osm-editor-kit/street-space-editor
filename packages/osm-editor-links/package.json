@@ -9,12 +9,12 @@
     "openstreetmap",
     "osm"
   ],
-  "homepage": "https://github.com/osmberlin/street-space-editor/tree/main/packages/osm-editor-links",
+  "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-editor-links",
   "license": "MIT",
   "author": "Tobias Jordans",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osmberlin/street-space-editor.git",
+    "url": "git+https://github.com/osm-editor-kit/street-space-editor.git",
     "directory": "packages/osm-editor-links"
   },
   "files": [
@@ -26,8 +26,7 @@
     ".": "./src/index.ts"
   },
   "publishConfig": {
-    "access": "public",
-    "tag": "alpha"
+    "access": "public"
   },
   "scripts": {
     "build": "tsup && rm -f .tsbuildinfo && tsc -p tsconfig.build.json",

@@ -15,7 +15,7 @@ export const APP_BUILD_DATE: string =
 /** Compact token for User-Agent product/version (no spaces). */
 export const APP_USER_AGENT_TOKEN = 'StreetSpaceEditor'
 
-export const APP_REPO_URL = 'https://github.com/osmberlin/street-space-editor'
+export const APP_REPO_URL = 'https://github.com/osm-editor-kit/street-space-editor'
 
 export const APP_CHANGELOG_URL = `${APP_REPO_URL}/blob/main/CHANGELOG.md`
 

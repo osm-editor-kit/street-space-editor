@@ -26,7 +26,10 @@ jobs:
       - run: bun run check-ci
       - run: bun run build
         env:
-          OSM_OAUTH_CLIENT_ID: WmTSsQVfDq0vkM1tbLahyohhowiL0AWHFFp5u5BkJe4
+          # https://www.openstreetmap.org/oauth2/applications/13548 (OSM user: tordans)
+          OSM_OAUTH_CLIENT_ID: a_Pr1K-tsRQ0GgdrsR9daU0hPtRZCTig031wF-zh3Tc
+          # https://master.apis.dev.openstreetmap.org/oauth2/applications/1390 (OSM user: tordansdev)
+          OSM_OAUTH_CLIENT_ID_DEV: rC3hbP0P5mj4-ZO5EaHXh-g2o6scRZceIvJ9lwJ8Xiw
       - run: cp app/dist/index.html app/dist/404.html
       - uses: actions/upload-pages-artifact@v5
         with:

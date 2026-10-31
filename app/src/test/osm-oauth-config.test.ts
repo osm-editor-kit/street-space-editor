@@ -3,14 +3,14 @@ import { getOsmOAuthRedirectUrl, OSM_OAUTH_LAND_FILENAME } from '../lib/osmOAuth
 
 describe('getOsmOAuthRedirectUrl', () => {
   test('keeps Vite project base when the SPA path has no trailing slash', () => {
-    expect(getOsmOAuthRedirectUrl('https://osmberlin.github.io', '/street-space-editor/')).toBe(
-      `https://osmberlin.github.io/street-space-editor/${OSM_OAUTH_LAND_FILENAME}`,
-    )
+    expect(
+      getOsmOAuthRedirectUrl('https://osm-editor-kit.github.io', '/street-space-editor/'),
+    ).toBe(`https://osm-editor-kit.github.io/street-space-editor/${OSM_OAUTH_LAND_FILENAME}`)
   })
 
   test('works when BASE_URL has no trailing slash', () => {
-    expect(getOsmOAuthRedirectUrl('https://osmberlin.github.io', '/street-space-editor')).toBe(
-      `https://osmberlin.github.io/street-space-editor/${OSM_OAUTH_LAND_FILENAME}`,
+    expect(getOsmOAuthRedirectUrl('https://osm-editor-kit.github.io', '/street-space-editor')).toBe(
+      `https://osm-editor-kit.github.io/street-space-editor/${OSM_OAUTH_LAND_FILENAME}`,
     )
   })
 

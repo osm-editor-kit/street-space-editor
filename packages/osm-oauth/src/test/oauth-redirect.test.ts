@@ -70,7 +70,7 @@ describe('oauth-redirect helpers', () => {
 
   test('resolveOAuthLandReturnUrl stays under Vite base when return URL is missing', () => {
     const land =
-      'https://osmberlin.github.io/street-space-editor/osm-oauth-land.html?code=abc&state=xyz'
+      'https://osm-editor-kit.github.io/street-space-editor/osm-oauth-land.html?code=abc&state=xyz'
     // Regression: `new URL('..', land)` was the host root 404.
     expect(new URL('..', land).pathname).toBe('/')
     expect(
@@ -84,11 +84,11 @@ describe('oauth-redirect helpers', () => {
 
   test('resolveOAuthLandReturnUrl restores deep links under the app base', () => {
     const resolved = resolveOAuthLandReturnUrl({
-      landHref: 'https://osmberlin.github.io/street-space-editor/osm-oauth-land.html',
+      landHref: 'https://osm-editor-kit.github.io/street-space-editor/osm-oauth-land.html',
       returnPath: '/street-space-editor/parking?map=16/52.4/13.4&f=way/1',
       callbackSearch: '?code=abc&state=xyz',
     })
-    const url = new URL(resolved, 'https://osmberlin.github.io')
+    const url = new URL(resolved, 'https://osm-editor-kit.github.io')
     expect(url.pathname).toBe('/street-space-editor/parking')
     expect(url.searchParams.get('map')).toBe('16/52.4/13.4')
     expect(url.searchParams.get('f')).toBe('way/1')
@@ -99,7 +99,7 @@ describe('oauth-redirect helpers', () => {
   test('resolveOAuthLandReturnUrl rejects return paths outside the app base', () => {
     expect(
       resolveOAuthLandReturnUrl({
-        landHref: 'https://osmberlin.github.io/street-space-editor/osm-oauth-land.html',
+        landHref: 'https://osm-editor-kit.github.io/street-space-editor/osm-oauth-land.html',
         returnPath: '/',
         callbackSearch: '?code=abc&state=xyz',
       }),
