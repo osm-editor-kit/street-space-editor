@@ -1,6 +1,6 @@
 {
   "name": "@osm-editor-kit/osm-data",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Download, parse, and merge OSM API/Overpass responses into an indexed in-memory store.",
   "homepage": "https://github.com/osm-editor-kit/street-space-editor/tree/main/packages/osm-data",
   "license": "MIT",
