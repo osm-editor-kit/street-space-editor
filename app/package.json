@@ -15,7 +15,7 @@
     "build:paraglide": "paraglide-js compile --project ./project.inlang --outdir ./paraglide --strategy localStorage baseLocale",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
-    "test-run": "bun test src/test"
+    "test-run": "bun test src"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
