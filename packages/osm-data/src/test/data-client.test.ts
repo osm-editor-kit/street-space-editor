@@ -1,5 +1,42 @@
-import { describe, expect, test } from 'bun:test'
-import { emptyParsedOsmData, mergeParsedOsm, parseOsmResp } from '../data-client'
+import { afterEach, describe, expect, test } from 'bun:test'
+import { downloadOsmData, emptyParsedOsmData, mergeParsedOsm, parseOsmResp } from '../data-client'
+
+const originalFetch = globalThis.fetch
+
+function stubFetch(response: Response) {
+  const calls: { url: string; init?: RequestInit }[] = []
+  globalThis.fetch = (async (url: string, init?: RequestInit) => {
+    calls.push({ url, init })
+    return response
+  }) as typeof fetch
+  return calls
+}
+
+afterEach(() => {
+  globalThis.fetch = originalFetch
+})
+
+describe('downloadOsmData', () => {
+  test('requests JSON and parses the elements', async () => {
+    const calls = stubFetch(
+      Response.json({ elements: [{ type: 'node', id: 1, lat: 52.47, lon: 13.44 }] }),
+    )
+
+    const parsed = await downloadOsmData('https://example.org/map')
+
+    expect(calls[0]?.url).toBe('https://example.org/map')
+    expect(calls[0]?.init?.headers).toEqual({ Accept: 'application/json' })
+    expect(parsed.nodeCoords[1]).toEqual([52.47, 13.44])
+  })
+
+  test('rejects on an HTTP error, with the message the app matches for 429', async () => {
+    stubFetch(new Response('Too Many Requests', { status: 429 }))
+
+    await expect(downloadOsmData('https://example.org/map')).rejects.toThrow(
+      'Request failed with status code 429',
+    )
+  })
+})
 
 describe('mergeParsedOsm', () => {
   test('merges nodes and keeps newer way versions', () => {

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { type RawOsmData } from './types/osm-data'
 import { type ParsedOsmData } from './types/osm-data-storage'
 
@@ -52,12 +51,13 @@ export async function downloadOsmData(url: string): Promise<ParsedOsmData> {
 }
 
 async function downloadContent(url: string): Promise<RawOsmData> {
-  const resp = await axios.get(url, {
+  const resp = await fetch(url, {
     headers: {
       Accept: 'application/json',
     },
   })
-  return resp.data
+  if (!resp.ok) throw new Error(`Request failed with status code ${resp.status}`)
+  return resp.json()
 }
 
 export function parseOsmResp(osmResp: RawOsmData): ParsedOsmData {

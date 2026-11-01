@@ -18,7 +18,6 @@ import {
 } from '@osm-editor-kit/osm-editor-links'
 import type { OsmFeatureRef } from '@osm-editor-kit/osm-map-url'
 import { compileOverpassWaySelectors } from '@osm-editor-kit/osm-way-chain'
-import axios from 'axios'
 import type { StreetSpaceModeId } from '../../modes/types'
 import { streetSpaceWayPolicy, type HighwayInclusionStyle } from './street-space-way-policy'
 
@@ -302,7 +301,7 @@ function getHighwaysOverpassQuery(bounds: MapBounds, inclusionStyle: HighwayIncl
 /** Open a normal external tab, or hit JOSM remote control for `josm` links. */
 export async function openExternalLink(href: string, options: { josm: boolean }) {
   if (options.josm) {
-    await axios.get(href)
+    await fetch(href)
     return
   }
   window.open(href, '_blank', 'noopener,noreferrer')
