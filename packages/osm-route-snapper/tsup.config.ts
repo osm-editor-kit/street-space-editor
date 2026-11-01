@@ -8,11 +8,5 @@ export default defineConfig({
   treeshake: true,
   sourcemap: false,
   // Keep vendored WASM glue external so import.meta.url resolves next to the .wasm file.
-  external: [
-    /@osm-editor-kit\//,
-    /^@tanstack\//,
-    'react',
-    'route-snapper',
-    /vendor\/osm-to-route-snapper/,
-  ],
+  external: [/@osm-editor-kit\//, /^@tanstack\//, 'route-snapper', /vendor\/osm-to-route-snapper/],
 })

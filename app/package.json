@@ -20,7 +20,6 @@
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
     "@headlessui/react": "^2.2",
-    "@inlang/paraglide-js": "^2.20.2",
     "@osm-editor-kit/maplibre-editor-layer-index": "^0.1.3",
     "@osm-editor-kit/osm-changeset": "workspace:*",
     "@osm-editor-kit/osm-coverage": "workspace:*",
@@ -57,13 +56,11 @@
     "@turf/nearest-point-on-line": "^7.3.5",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
-    "dayjs": "^1.11.13",
     "json5": "2.2.3",
     "lucide-react": "^1.25.0",
     "mapillary-js": "^4.1.2",
     "maplibre-gl": "^6.7.0",
     "motion": "^12.42.2",
-    "osm-parking-tag-updater": "github:osmberlin/osm-tag-updater",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-map-gl": "^8.1.3",
@@ -73,6 +70,7 @@
     "zustand": "^5.0.7"
   },
   "devDependencies": {
+    "@inlang/paraglide-js": "^2.20.2",
     "@inlang/plugin-m-function-matcher": "^2.2.9",
     "@inlang/plugin-message-format": "^4.4.0",
     "@tailwindcss/vite": "^4.3.3",
@@ -83,7 +81,6 @@
     "@typescript/typescript-darwin-arm64": "^7.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "babel-plugin-react-compiler": "^19.1.0-rc.2",
-    "browserslist": "^4.25.3",
     "browserslist-to-esbuild": "^2.1.1",
     "bun-types": "^1.2.20",
     "sass": "^1.90.0",

@@ -11,7 +11,7 @@ Build a [route-snapper](https://github.com/a-b-street/route-snapper) graph from 
 npm install @osm-editor-kit/osm-route-snapper
 ```
 
-Also install the peer dependencies: `react`, `@tanstack/react-query` and `route-snapper` (`^0.4.9`).
+Also install the peer dependencies: `@tanstack/react-query` and `route-snapper` (`^0.4.9`).
 
 ## What it does
 

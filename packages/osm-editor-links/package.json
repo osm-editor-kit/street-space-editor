@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "bun-types": "^1.2.20",
+    "tsup": "^8.5.1",
     "typescript": "^7.0.0"
   },
   "publishExports": {

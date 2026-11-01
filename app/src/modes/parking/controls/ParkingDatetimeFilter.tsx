@@ -1,6 +1,6 @@
 import * as m from '@app/paraglide/messages'
 import { useParams } from '@tanstack/react-router'
-import dayjs from 'dayjs'
+import { format, isValid } from 'date-fns'
 import { Field, Label } from '../../../components/catalyst/fieldset'
 import { Input } from '../../../components/catalyst/input'
 import { useAppActions, useDatetime } from '../../../shell/app-store'
@@ -23,7 +23,7 @@ export function ParkingDatetimeFilter({ fullWidth = false }: { fullWidth?: boole
         <Label className={fullWidth ? undefined : 'sr-only'}>{m.parking_datetime_label()}</Label>
         <Input
           id="datetime-input"
-          value={dayjs(datetime).format('YYYY-MM-DDTHH:mm')}
+          value={isValid(datetime) ? format(datetime, "yyyy-MM-dd'T'HH:mm") : ''}
           className={fullWidth ? 'max-w-none' : 'max-w-40'}
           type="datetime-local"
           title={m.parking_datetime_title()}
