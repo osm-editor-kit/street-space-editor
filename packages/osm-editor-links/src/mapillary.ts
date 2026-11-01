@@ -1,4 +1,4 @@
-import type { LatLngLiteral } from '@osm-editor-kit/osm-data'
+import type { LatLngLiteral } from './geo'
 
 export type MapillaryUrlOptions = {
   /** UTC calendar date (`YYYY-MM-DD`) for Mapillary's `dateFrom` filter. */

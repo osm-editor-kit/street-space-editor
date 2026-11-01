@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import type { MapBounds } from '@osm-editor-kit/osm-data'
+import type { MapBounds } from '../geo'
 import { getUrl } from '../map-download-url'
 
 describe('getUrl', () => {

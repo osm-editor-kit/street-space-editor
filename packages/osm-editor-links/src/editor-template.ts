@@ -1,4 +1,4 @@
-import type { LatLngLiteral } from '@osm-editor-kit/osm-data'
+import type { LatLngLiteral } from './geo'
 import type { OsmObjectType } from './osm-type'
 import { toShortOsmType } from './osm-type'
 

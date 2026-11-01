@@ -1,4 +1,4 @@
-import type { LatLngLiteral, OsmNode, OsmRelation, OsmWay } from '@osm-editor-kit/osm-data'
+import type { LatLngLiteral } from './geo'
 import { josmRemoteBase } from './hosts'
 import type { OsmObjectType } from './osm-type'
 import { toShortOsmType } from './osm-type'
@@ -7,7 +7,7 @@ type IdEditorUrlProps = {
   center?: LatLngLiteral
   zoom?: number
   background?: string
-  osmObjectType?: OsmRelation['type'] | OsmWay['type'] | OsmNode['type']
+  osmObjectType?: OsmObjectType
   osmObjectId?: number | string
 }
 

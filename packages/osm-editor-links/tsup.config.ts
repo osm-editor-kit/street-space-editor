@@ -7,5 +7,4 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   sourcemap: false,
-  external: ['@osm-editor-kit/osm-data'],
 })

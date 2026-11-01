@@ -1,4 +1,4 @@
-import type { MapBounds } from '@osm-editor-kit/osm-data'
+import type { MapBounds } from './geo'
 import { osmDevUrl, osmProdApiUrl } from './hosts'
 
 export function getUrl(bounds: MapBounds, useDevServer: boolean): string {

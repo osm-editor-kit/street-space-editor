@@ -94,8 +94,6 @@ tildaInspectorUrl({
 
 URL builders that take an OSM type and id return `undefined` when either is missing.
 
-`@osm-editor-kit/osm-data` is installed as a dependency; it provides the shared map bounds and OSM object types.
-
 ## License
 
 MIT
