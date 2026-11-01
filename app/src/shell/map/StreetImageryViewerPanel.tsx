@@ -4,10 +4,10 @@ import {
   MAPILLARY_FEATURE_BAR_LABELS,
   MapillaryFeatureBar,
   StreetImageryLocaleProvider,
-  StreetLevelImageryViewer,
   useViewerActions,
   type StreetImageryPhotoSelection,
 } from '@osm-editor-kit/street-imagery-react'
+import { StreetLevelImageryViewer } from '@osm-editor-kit/street-imagery-react/viewer'
 import { useSearch } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import { useEffect } from 'react'
